@@ -1,11 +1,15 @@
 package pl.coderslab.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.repository.GroupModelRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
+@Transactional
 public class DBGroupService implements GroupService{
     private final GroupModelRepository groupModelRepository;
 
