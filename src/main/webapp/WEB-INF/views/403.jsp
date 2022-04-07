@@ -6,5 +6,6 @@
 </head>
 <body>
 <h1>Dostęp zabroniony</h1>
+<a href="start"></a>
 </body>
 </html>

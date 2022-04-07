@@ -29,7 +29,7 @@
 <!--my-5 - marginesy-->
 <div class="container-lg my-5">
     <div class="row">
-        <div class="col-2"><a href="/user/logout/">LogOut</a></div>
+        <div class="col-2"><a href="/logout">LogOut</a></div>
         <div class="col-10">
             <h2 class="text-dark">WELCOME</h2>
         </div>
@@ -37,19 +37,19 @@
     </div>
     <div class="row">
         <div class="col">
-            <a href="/data/customers/">Customer</a>
+            <a href="/admin/customers/">Customer</a>
         </div>
         <div class="col">
-            <a href="/data/customers/add/">add Customers</a>
+            <a href="/admin/customers/add/">add Customers</a>
         </div>
         <div class="col">3</div>
     </div>
     <div class="row">
         <div class="col">
-            <a href="/data/groups/">Groups</a>
+            <a href="/user/groups">Groups</a>
         </div>
         <div class="col">
-            <a href="/data/groups/add/">add Group</a>
+            <a href="/user/groups/add/">add Group</a>
         </div>
     </div>
 </div>

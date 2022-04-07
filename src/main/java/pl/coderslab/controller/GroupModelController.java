@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,8 @@ import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/data/groups")
+//@Secured("ROLE_USER")
+@RequestMapping("/user/groups")
 public class GroupModelController {
     private final GroupService groupService;
     private final CustomerService customerService;
@@ -30,9 +32,11 @@ public class GroupModelController {
         return groupService.findAll().stream()
                 .map(GroupModel::toString)
                 .collect(Collectors.joining(" | "));
+//        return "Groups";
     }
 
     @GetMapping("/add")
+//    @Secured("ROLE_USER")
     @ResponseBody
     private String add(){
         GroupModel group = new GroupModel();

@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,8 @@ import pl.coderslab.service.DBGroupService;
 import pl.coderslab.service.GroupService;
 
 @Controller
-@RequestMapping("/data/customers")
+//@RequestMapping("/data/customers")
+@RequestMapping("/admin/customers")
 public class CustomerController {
     private final CustomerService customerService;
     private final DBGroupService dbGroupService;
