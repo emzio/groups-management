@@ -22,12 +22,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-//                .antMatchers("/").permitAll()
-                .antMatchers("/").authenticated()
+                .antMatchers("/").permitAll()
+//                .antMatchers("/").authenticated()
                 .antMatchers("/data/**/add").hasRole("ADMIN")
                 .antMatchers("/data/**").authenticated()
                 .and().formLogin()
                 .loginPage("/user/login")
-                .defaultSuccessUrl("/data/groups");
+                .defaultSuccessUrl("/start")
+                .and().logout().logoutSuccessUrl("/")
+                .and().exceptionHandling().accessDeniedPage("/403");
     }
 }

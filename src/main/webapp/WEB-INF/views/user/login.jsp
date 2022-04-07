@@ -29,7 +29,8 @@
 <!--my-5 - marginesy-->
 <div class="container-lg my-5">
     <div class="row">
-        <div class="col-2"><h2 class="text-dark">WELCOME</h2></div>
+        <div class="col-2"><h2 class="text-dark">WELCOME</h2>
+        </div>
         <div class="col-10">
             <form method="post">
                 <div><label> User Name : <input type="text" name="username"/> </label></div>

@@ -10,5 +10,7 @@ public class AppConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/user/login").setViewName("user/login");
         registry.addViewController("/user/logout").setViewName("user/logout");
+        registry.addViewController("/start").setViewName("/user/userstart");
+        registry.addViewController("/403").setViewName("403");
     }
 }

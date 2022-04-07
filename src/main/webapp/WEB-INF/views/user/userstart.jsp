@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <head>
     <meta charset="UTF-8">
@@ -30,43 +29,29 @@
 <!--my-5 - marginesy-->
 <div class="container-lg my-5">
     <div class="row">
-
-
-        <div class="col-2"><sec:authorize access="isAnonymous()"><a href="/user/login">LogIN</a></sec:authorize></div>
+        <div class="col-2"><a href="/user/logout/">LogOut</a></div>
         <div class="col-10">
-            <h2 class="text-dark">WELCOME
-            <sec:authorize access="isAuthenticated()">
-                <p> <sec:authentication property="principal.username"/></p>
-                <p>Uprawnienia: <sec:authentication property="authorities"/></p>
-            </sec:authorize>
-
-            </h2>
-            <h4 class="text-info">
-                <sec:authorize url="/data/customers/add">
-                    DOSTĘP DO EDYCJI
-                </sec:authorize>
-            </h4>
+            <h2 class="text-dark">WELCOME</h2>
         </div>
 
     </div>
     <div class="row">
         <div class="col">
-            <sec:authorize access="isAuthenticated()">
-                <form action="<c:url value="/logout"/>" method="post">
-                    <input type="submit" value="Wyloguj">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                </form>
-            </sec:authorize>
-
+            <a href="/data/customers/">Customer</a>
         </div>
         <div class="col">
-            <sec:authorize access="isAuthenticated()">
-                <a href="/start">Overview</a></div>
-            </sec:authorize>
+            <a href="/data/customers/add/">add Customers</a>
         </div>
-
+        <div class="col">3</div>
     </div>
-
+    <div class="row">
+        <div class="col">
+            <a href="/data/groups/">Groups</a>
+        </div>
+        <div class="col">
+            <a href="/data/groups/add/">add Group</a>
+        </div>
+    </div>
 </div>
 
 <h2 class="text-center t">other</h2>
