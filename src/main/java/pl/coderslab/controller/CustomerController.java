@@ -11,7 +11,7 @@ import pl.coderslab.service.DBGroupService;
 import pl.coderslab.service.GroupService;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping("/data/customers")
 public class CustomerController {
     private final CustomerService customerService;
     private final DBGroupService dbGroupService;
@@ -39,4 +39,5 @@ public class CustomerController {
         customerService.save(customer);
         return customer.toString();
     }
+
 }

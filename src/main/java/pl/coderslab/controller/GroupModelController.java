@@ -14,7 +14,7 @@ import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/groups")
+@RequestMapping("/data/groups")
 public class GroupModelController {
     private final GroupService groupService;
     private final CustomerService customerService;
