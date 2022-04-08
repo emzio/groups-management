@@ -14,12 +14,18 @@ import pl.coderslab.service.SpringDataUserDetailsService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user2").password("{noop}user2").roles("USER")
-                .and().withUser("admin").password("{noop}admin").roles("ADMIN");
 
+//    @Override
+//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("admin2").password(passwordEncoder().encode("admin2")).roles("ADMIN", "USER")
+//                .and()
+//                .withUser("user2").password(passwordEncoder().encode("user2")).roles("USER");
+//    }
+
+    @Bean
+    public SpringDataUserDetailsService customUserDetailsService() {
+        return new SpringDataUserDetailsService();
     }
 
     @Override
@@ -41,8 +47,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SpringDataUserDetailsService customUserDetailsService() {
-        return new SpringDataUserDetailsService();
-    }
 }

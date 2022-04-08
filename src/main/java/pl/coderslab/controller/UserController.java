@@ -27,7 +27,7 @@ public class UserController {
         return "admin";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/infoadmin")
     @ResponseBody
     public String userInfo(@AuthenticationPrincipal UserDetails customUser) {
 //        log.info("customUser class {} " , customUser.getClass());
