@@ -21,6 +21,17 @@ public class GroupModel {
     private DayOfWeek dayOfWeek;
     private LocalTime localTime;
 
+    @ManyToMany
+    @JoinTable(name = "GroupModel_canceledClasses",
+            joinColumns = @JoinColumn(name = "GroupModel_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "canceledClasses_id", referencedColumnName = "id"))
+    private List<CanceledClasses> canceledClasses = new ArrayList<>();
+
+    public List<CanceledClasses> getCanceledClasses() {
+        return canceledClasses;
+    }
+
+
     @Override
     public String toString() {
         return "GroupModel{" +
