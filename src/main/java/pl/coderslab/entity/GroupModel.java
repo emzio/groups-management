@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 //@Table(name = "other")
 public class GroupModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,26 +21,25 @@ public class GroupModel {
     private String name;
     private DayOfWeek dayOfWeek;
     private LocalTime localTime;
-
-    @ManyToMany
-    @JoinTable(name = "GroupModel_canceledClasses",
-            joinColumns = @JoinColumn(name = "GroupModel_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "canceledClasses_id", referencedColumnName = "id"))
-    private List<CanceledClasses> canceledClasses = new ArrayList<>();
-
-    public List<CanceledClasses> getCanceledClasses() {
-        return canceledClasses;
-    }
-
+    private Integer size;
 
     @Override
     public String toString() {
         return "GroupModel{" +
-                "id=" + id +
+                "size=" + size +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", dayOfWeek=" + dayOfWeek +
                 ", localTime=" + localTime +
                 '}';
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
     }
 
     public List<Customer> getCustomers() {

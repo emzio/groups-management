@@ -1,11 +1,12 @@
 package pl.coderslab.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class CanceledClasses {
@@ -13,6 +14,7 @@ public class CanceledClasses {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DateTimeFormat(pattern = "yyyyMMdd")
     private LocalDate localDate;
 
     @Override

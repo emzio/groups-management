@@ -19,21 +19,6 @@ public class DBGroupService implements GroupService{
     }
 
     @Override
-    public List<GroupModel> findAllWithCanceledClasses(){
-        List<GroupModel> all = groupModelRepository.findAll();
-        all.stream()
-                .forEach(groupModel -> Hibernate.initialize(groupModel.getCanceledClasses()));
-        return all;
-    }
-
-    @Override
-    public Optional<GroupModel> findByIdWithCanceledClasses(Long id){
-        Optional<GroupModel> groupModelOptional = groupModelRepository.findById(id);
-        Hibernate.initialize(groupModelOptional.get().getCanceledClasses());
-        return groupModelOptional;
-    }
-
-    @Override
     public List<GroupModel> findAll() {
         return groupModelRepository.findAll();
     }

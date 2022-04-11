@@ -12,13 +12,13 @@ import pl.coderslab.entity.User;
 import java.util.HashSet;
 import java.util.Set;
 
-@Service
+//@Service
 public class SpringDataUserDetailsService implements UserDetailsService {
 
     private UserService userService;
 
     @Autowired
-    public void setUserRepository(UserService userService) {
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 

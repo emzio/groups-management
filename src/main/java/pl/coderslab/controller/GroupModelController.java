@@ -50,11 +50,12 @@ public class GroupModelController {
         group.setName("nameTest");
         group.setDayOfWeek(DayOfWeek.FRIDAY);
         group.setLocalTime(LocalTime.parse("18:00"));
+        group.setSize(6);
         Customer customer = customerService.findByIdWithGroups(1l);
 
-        CanceledClasses canceledClass = canceledClassesService.findById(1L).get();
-
-        group.getCanceledClasses().add(canceledClass);
+//        CanceledClasses canceledClass = canceledClassesService.findById(1L).get();
+//
+//        group.getCanceledClasses().add(canceledClass);
 
 
         group.getCustomers().add(customer);
@@ -65,15 +66,15 @@ public class GroupModelController {
         return group.toString();
     }
 
-    @GetMapping("/canceled/{canceledId}")
-    @ResponseBody
-    private String addCanceledClass(@PathVariable Long canceledId){
-        GroupModel groupModel = groupService.findByIdWithCanceledClasses(1l).get();
-        CanceledClasses canceledClasses = canceledClassesService.findById(canceledId).get();
-        groupModel.getCanceledClasses().add(canceledClasses);
-        groupService.save(groupModel);
-        return groupModel.toString();
-    }
+//    @GetMapping("/canceled/{canceledId}")
+//    @ResponseBody
+//    private String addCanceledClass(@PathVariable Long canceledId){
+//        GroupModel groupModel = groupService.findByIdWithCanceledClasses(1l).get();
+//        CanceledClasses canceledClasses = canceledClassesService.findById(canceledId).get();
+//        groupModel.getCanceledClasses().add(canceledClasses);
+//        groupService.save(groupModel);
+//        return groupModel.toString();
+//    }
 
     @GetMapping("/fcd/{id}")
     @ResponseBody
