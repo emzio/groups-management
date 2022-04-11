@@ -27,10 +27,22 @@ public class UserController {
         return "admin";
     }
 
+    @GetMapping("/create-admin")
+    @ResponseBody
+    private String createAdmin(){
+        User user = new User();
+        user.setUsername("admin3");
+        user.setPassword("admin3");
+        userService.saveAdmin(user);
+        return "admin2";
+    }
+
     @GetMapping("/infoadmin")
     @ResponseBody
     public String userInfo(@AuthenticationPrincipal UserDetails customUser) {
 //        log.info("customUser class {} " , customUser.getClass());
         return "You are logged as " + customUser;
     }
+
+
 }

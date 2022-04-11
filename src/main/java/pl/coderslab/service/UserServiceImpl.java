@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     public User findByUserName(String username) {
         return userRepository.findByUsername(username);
     }
+
     @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -35,6 +36,16 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByName("ROLE_USER");
 //        Role userRole = roleRepository.findByName("ROLE_ADMIN");
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void saveAdmin(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(1);
+        Role userRole = roleRepository.findByName("ROLE_USER");
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+        user.setRoles(new HashSet<>(Arrays.asList(userRole, adminRole)));
         userRepository.save(user);
     }
 }
