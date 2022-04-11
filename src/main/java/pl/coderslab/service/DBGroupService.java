@@ -1,5 +1,6 @@
 package pl.coderslab.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.coderslab.entity.GroupModel;
