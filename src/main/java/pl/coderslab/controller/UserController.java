@@ -6,10 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pl.coderslab.service.CurrentUser;
 import pl.coderslab.entity.User;
-import pl.coderslab.service.DBGroupService;
 import pl.coderslab.service.UserService;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -27,9 +28,9 @@ public class UserController {
         User user = new User();
         user.setUsername(userName);
         user.setPassword("admin");
-        user.setEmail("email@domena.pl");
-        user.setName("Michal");
-        user.setLastName("Ziółkowski");
+//        user.setEmail("email@domena.pl");
+//        user.setName("Michal");
+//        user.setLastName("Ziółkowski");
 //        user.getGroups()
         userService.saveUser(user);
         return "admin";
@@ -57,9 +58,17 @@ public class UserController {
     private String findAll(){
         String result = userService.findAll().stream()
                 .map(user ->
-                        String.join(" ; ", user.getUsername(), user.getEmail(), user.getName(), user.getLastName(), user.getRoles().toString()))
+//                        String.join(" ; ", user.getUsername(), user.getEmail(), user.getName(), user.getLastName(), user.getRoles().toString()))
+        String.join(" ; ", user.getUsername(), user.getRoles().toString()))
                 .collect(Collectors.joining(" | "));
-        return result;
+        return result.toString();
+    }
+
+    @GetMapping("/admin/info")
+    @ResponseBody
+    public String admin(@AuthenticationPrincipal CurrentUser customUser) {
+        User entityUser = customUser.getUser();
+        return "Hello " + entityUser.getUsername() + entityUser.getRoles().toString();
     }
 
 //    @GetMapping("/admin/user/add")

@@ -40,7 +40,7 @@
             <a href="/admin/users/">Customer</a>
         </div>
         <div class="col">
-            <a href="/admin/customers/add/">add Customers</a>
+            <a href="/create-user/addedLogin">add Customers</a>
         </div>
         <div class="col">3</div>
     </div>

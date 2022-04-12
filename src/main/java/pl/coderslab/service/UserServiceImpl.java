@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByIdWithGroups(Long id) {
         User user = userRepository.findById(id).get();
-        Hibernate.initialize(user.getGroups());
+//        Hibernate.initialize(user.getGroups());
         Hibernate.initialize(user.getRoles());
         return user;
     }
