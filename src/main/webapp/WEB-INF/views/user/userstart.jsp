@@ -37,7 +37,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <a href="/admin/customers/">Customer</a>
+            <a href="/admin/users/">Customer</a>
         </div>
         <div class="col">
             <a href="/admin/customers/add/">add Customers</a>

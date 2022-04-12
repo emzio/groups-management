@@ -3,6 +3,9 @@ package pl.coderslab.service;
 import org.springframework.stereotype.Service;
 import pl.coderslab.entity.User;
 
+import java.util.List;
+import java.util.Optional;
+
 
 public interface UserService {
 
@@ -11,4 +14,16 @@ public interface UserService {
     void saveUser(User user);
 
     void saveAdmin(User user);
+
+    public Optional<User> findById(Long id);
+
+    public void deleteById(Long id);
+
+    public void update(User user);
+
+    public User findByIdWithGroups(Long id);
+
+    public List<User> findAll();
+
+    public void save(User user);
 }

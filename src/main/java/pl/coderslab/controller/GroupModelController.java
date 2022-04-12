@@ -5,12 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import pl.coderslab.entity.CanceledClasses;
-import pl.coderslab.entity.Customer;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.User;
 import pl.coderslab.service.CanceledClassesService;
-import pl.coderslab.service.CustomerService;
 import pl.coderslab.service.GroupService;
+import pl.coderslab.service.UserService;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -25,13 +24,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/user/groups")
 public class GroupModelController {
     private final GroupService groupService;
-    private final CustomerService customerService;
     private final CanceledClassesService canceledClassesService;
+    private final UserService userService;
 
-    public GroupModelController(GroupService groupService, CustomerService customerService, CanceledClassesService canceledClassesService) {
+    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService) {
         this.groupService = groupService;
-        this.customerService = customerService;
         this.canceledClassesService = canceledClassesService;
+        this.userService = userService;
     }
 
     @GetMapping("")
@@ -51,30 +50,23 @@ public class GroupModelController {
         group.setDayOfWeek(DayOfWeek.FRIDAY);
         group.setLocalTime(LocalTime.parse("18:00"));
         group.setSize(6);
-        Customer customer = customerService.findByIdWithGroups(1l);
+        User user = userService.findByIdWithGroups(1l);
 
-//        CanceledClasses canceledClass = canceledClassesService.findById(1L).get();
-//
-//        group.getCanceledClasses().add(canceledClass);
+//        Customer customer = customerService.findByIdWithGroups(1l);
 
+        group.getUsers().add(user);
+//        group.getCustomers().add(customer);
 
-        group.getCustomers().add(customer);
-        customer.getGroups().add(group);
+        user.getGroups().add(group);
+
+//        customer.getGroups().add(group);
 
         groupService.save(group);
-        customerService.save(customer);
+        userService.save(user);
+
+//        customerService.save(customer);
         return group.toString();
     }
-
-//    @GetMapping("/canceled/{canceledId}")
-//    @ResponseBody
-//    private String addCanceledClass(@PathVariable Long canceledId){
-//        GroupModel groupModel = groupService.findByIdWithCanceledClasses(1l).get();
-//        CanceledClasses canceledClasses = canceledClassesService.findById(canceledId).get();
-//        groupModel.getCanceledClasses().add(canceledClasses);
-//        groupService.save(groupModel);
-//        return groupModel.toString();
-//    }
 
     @GetMapping("/fcd/{id}")
     @ResponseBody

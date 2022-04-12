@@ -16,7 +16,7 @@ public class GroupModel {
     private Long id;
 
     @ManyToMany(mappedBy = "groups")
-    private List<Customer> customers = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
     private String name;
     private DayOfWeek dayOfWeek;
@@ -34,20 +34,28 @@ public class GroupModel {
                 '}';
     }
 
-    public Integer getSize() {
-        return size;
+    public Long getId() {
+        return id;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public List<Customer> getCustomers() {
-        return customers;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setCustomers(List<Customer> customers) {
-        this.customers = customers;
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public DayOfWeek getDayOfWeek() {
@@ -66,19 +74,11 @@ public class GroupModel {
         this.localTime = localTime;
     }
 
-    public String getName() {
-        return name;
+    public Integer getSize() {
+        return size;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setSize(Integer size) {
+        this.size = size;
     }
 }
