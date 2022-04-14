@@ -8,6 +8,7 @@ import pl.coderslab.service.CanceledClassesService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("admin/canceled")
@@ -23,6 +24,14 @@ public class CanceledClassesController {
         CanceledClasses canceledClasses = new CanceledClasses();
         model.addAttribute("canceled", canceledClasses);
         return "admin/canceledAdd";
+    }
+
+    @GetMapping("")
+    @ResponseBody
+    private String findAll(){
+        return canceledClassesService.findAll().stream()
+                .map(CanceledClasses::toString)
+                .collect(Collectors.joining(" | "));
     }
 
     // BAJZEL Z METODĄ POST:

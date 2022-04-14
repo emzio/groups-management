@@ -37,29 +37,29 @@
     </div>
     <div class="row">
         <div class="col">
-            <a href="/admin/users/">Customer</a>
+            <a href="/admin/users/">Users</a>
         </div>
         <div class="col">
-            <a href="/create-user/addedLogin">add Customers</a>
+            <a href="/create-user/addedLogin">add User</a>
         </div>
         <div class="col">3</div>
     </div>
     <div class="row">
         <div class="col">
-            <a href="/user/groups">Groups</a>
+            <a href="/admin/groups">Groups</a>
         </div>
         <div class="col">
-            <a href="/user/groups/add/">add Group</a>
+            <a href="/admin/groups/add/">add Group</a>
         </div>
     </div>
 </div>
 
-<h2 class="text-center t">other</h2>
+<h2 class="text-center t">Canceled Classes</h2>
 <div class="container-lg">
     <div class="row">
-        <div class="col">1</div>
-        <div class="col">2</div>
-        <div class="col">3</div>
+        <div class="col"><a href="/admin/canceled/add/">Add Canceled Class</a></div>
+        <div class="col"><a href="/admin/canceled/">All Canceled Class</a></div>
+        <div class="col"><a href="/admin/groups/fcd/1">Canceled Class for group 1</a></div>
     </div>
     <div class="row">
         <div class="col-md-8">1</div>

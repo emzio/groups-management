@@ -32,7 +32,10 @@
     <div class="row">
 
 
-        <div class="col-2"><sec:authorize access="isAnonymous()"><a href="/login">LogIN</a></sec:authorize></div>
+        <div class="col-2">
+            <p><sec:authorize access="isAnonymous()"><a href="/login">Login</a></sec:authorize></p>
+            <p><sec:authorize access="isAnonymous()"><a href="/registry">Registry</a></sec:authorize></p>
+        </div>
         <div class="col-10">
             <h2 class="text-dark">WELCOME
             <sec:authorize access="isAuthenticated()">
@@ -42,7 +45,7 @@
 
             </h2>
             <h4 class="text-info">
-                <sec:authorize url="/admin/customers/add">
+                <sec:authorize url="/admin/infoadmin">
                     DOSTĘP DO EDYCJI
                 </sec:authorize>
             </h4>
