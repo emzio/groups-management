@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <head>
     <meta charset="UTF-8">
-    <title>Add canceled classes</title>
+    <title>Registry</title>
     <style>
         [class*="col"] {
             padding: 1rem;
@@ -30,16 +30,24 @@
 <!--my-5 - marginesy-->
 <div class="container-lg my-5">
     <div class="row">
-        <div class="col-2"><h2 class="text-dark">Add canceled classes</h2>
+        <div class="col-2"><h2 class="text-dark">Registry form</h2>
         </div>
         <div class="col-10">
-            <h2>${canceled}</h2>
 
-            <form:form method="post" modelAttribute="canceled">
-                <div>
-                    localDate <form:input path="localDate"/>
+
+            <form:form method="post" modelAttribute="user">
+                <div class="flex-container">
+
+                    Login:<form:input path="username"/>
+<%--                    <span>Rating: <form:input path="rating"/></span><form:errors path="rating"></form:errors>--%>
+                    Password: <form:input path="password"/>
+
+                    Name: <form:input path="name"/>
+                    lastname: <form:input path="lastName"/>
+                    email: <form:input path="email"/>
+                    Groups: <form:select path="groups" items="${groups}" itemLabel="name" itemValue="id"/>
                 </div>
-                <input type="submit" value="Add Date">
+                <input type="submit" value="Register">
             </form:form>
         </div>
     </div>

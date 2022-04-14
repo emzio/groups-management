@@ -1,5 +1,6 @@
 package pl.coderslab.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.coderslab.entity.Role;
@@ -9,6 +10,8 @@ import pl.coderslab.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,6 +49,38 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByName("ROLE_USER");
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         user.setRoles(new HashSet<>(Arrays.asList(userRole, adminRole)));
+        userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public User findByIdWithGroups(Long id) {
+        User user = userRepository.findById(id).get();
+        Hibernate.initialize(user.getGroups());
+        return user;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void save(User user){
         userRepository.save(user);
     }
 }

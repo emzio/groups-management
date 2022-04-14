@@ -1,38 +1,58 @@
 package pl.coderslab.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import pl.coderslab.entity.CanceledClasses;
-import pl.coderslab.entity.Customer;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.entity.GroupModel;
-import pl.coderslab.service.CanceledClassesService;
-import pl.coderslab.service.CustomerService;
-import pl.coderslab.service.GroupService;
+import pl.coderslab.entity.User;
+import pl.coderslab.service.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 //@Secured("ROLE_USER")
-@RequestMapping("/user/groups")
+@RequestMapping("/admin/groups")
 public class GroupModelController {
     private final GroupService groupService;
-    private final CustomerService customerService;
     private final CanceledClassesService canceledClassesService;
+    private final UserService userService;
+    private final DayOfWeekService dayOfWeekService;
 
-    public GroupModelController(GroupService groupService, CustomerService customerService, CanceledClassesService canceledClassesService) {
+    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService) {
         this.groupService = groupService;
-        this.customerService = customerService;
         this.canceledClassesService = canceledClassesService;
+        this.userService = userService;
+        this.dayOfWeekService = dayOfWeekService;
     }
+
+    @GetMapping("/add")
+    private String showAddForm(Model model){
+        GroupModel groupModel = new GroupModel();
+        model.addAttribute("groupModel" , groupModel);
+        return "/admin/groups/add";
+    }
+
+    @PostMapping("/add")
+    @ResponseBody
+    private String proceedAddForm(GroupModel groupModel){
+        groupService.save(groupModel);
+        return groupModel.toString();
+    }
+
+    @ModelAttribute("daysOfWeek")
+    Collection<String> findAllGroups(){
+        return dayOfWeekService.findAll();
+    }
+
+
+    // PONIŻEJ AKCJE TESTOWE, BEZ FORMULARZY!!!
 
     @GetMapping("")
     @ResponseBody
@@ -42,8 +62,15 @@ public class GroupModelController {
                 .collect(Collectors.joining(" | "));
     }
 
-    @GetMapping("/add")
-//    @Secured("ROLE_USER")
+    @GetMapping("/fwu/{id}")
+    @ResponseBody
+    private String findWithUsers(@PathVariable Long id){
+        return groupService.findJoiningUsers(id).getUsers().stream()
+                .map(user -> user.getUsername())
+                .collect(Collectors.joining(" | "));
+    }
+
+    @GetMapping("/add2")
     @ResponseBody
     private String add(){
         GroupModel group = new GroupModel();
@@ -51,30 +78,16 @@ public class GroupModelController {
         group.setDayOfWeek(DayOfWeek.FRIDAY);
         group.setLocalTime(LocalTime.parse("18:00"));
         group.setSize(6);
-        Customer customer = customerService.findByIdWithGroups(1l);
+        User user = userService.findByIdWithGroups(2l);
+        group.getUsers().add(user);
 
-//        CanceledClasses canceledClass = canceledClassesService.findById(1L).get();
-//
-//        group.getCanceledClasses().add(canceledClass);
-
-
-        group.getCustomers().add(customer);
-        customer.getGroups().add(group);
+        user.getGroups().add(group);
 
         groupService.save(group);
-        customerService.save(customer);
-        return group.toString();
-    }
+        userService.save(user);
 
-//    @GetMapping("/canceled/{canceledId}")
-//    @ResponseBody
-//    private String addCanceledClass(@PathVariable Long canceledId){
-//        GroupModel groupModel = groupService.findByIdWithCanceledClasses(1l).get();
-//        CanceledClasses canceledClasses = canceledClassesService.findById(canceledId).get();
-//        groupModel.getCanceledClasses().add(canceledClasses);
-//        groupService.save(groupModel);
-//        return groupModel.toString();
-//    }
+        return group.toString() + "DAYSOFWEEK: ";
+    }
 
     @GetMapping("/fcd/{id}")
     @ResponseBody

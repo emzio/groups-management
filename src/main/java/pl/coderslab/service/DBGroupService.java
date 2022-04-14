@@ -42,4 +42,13 @@ public class DBGroupService implements GroupService{
     public void update(GroupModel groupModel) {
         groupModelRepository.save(groupModel);
     }
+
+    @Override
+    public GroupModel findJoiningUsers(Long id) {
+        GroupModel groupModel = groupModelRepository.findById(id).get();
+        Hibernate.initialize(groupModel.getUsers());
+        return groupModel;
+    }
+
+
 }
