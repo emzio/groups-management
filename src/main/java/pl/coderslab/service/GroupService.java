@@ -18,4 +18,8 @@ public interface GroupService {
     public void update(GroupModel groupModel);
 
     public GroupModel findJoiningUsers(Long id);
+
+    List<GroupModel> findAllJoiningUsers();
+
+    List<GroupModel> findGroupsWithFreePlaces();
 }

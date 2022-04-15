@@ -5,7 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
-import pl.coderslab.service.*;
+import pl.coderslab.service.CanceledClassesService;
+import pl.coderslab.service.DayOfWeekService;
+import pl.coderslab.service.GroupService;
+import pl.coderslab.service.UserService;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -14,6 +17,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -46,9 +50,120 @@ public class GroupModelController {
         return groupModel.toString();
     }
 
+    @GetMapping("/update/{id}")
+    private String showUpdateForm(@PathVariable Long id, Model model){
+        model.addAttribute("groupModel" , groupService.findJoiningUsers(id));
+        return "/admin/groups/update";
+    }
+
+    @PostMapping("/update/{id}")
+    @ResponseBody
+    private String proceedUpdateForm(GroupModel groupModel){
+        GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
+        List<User> formerUsers = groupToUpdate.getUsers();
+        formerUsers.stream()
+                        .forEach(user -> {
+                            user.getGroups().remove(groupToUpdate);
+                            userService.save(user);
+                        });
+        groupModel.getUsers().stream()
+                        .forEach(user -> {
+                            user.getGroups().add(groupModel);
+                            userService.save(user);
+                        });
+        groupService.save(groupModel);
+        return groupModel.toString();
+    }
+
+    @GetMapping("/addUser/{id}")
+    private String addUserShowForm(@PathVariable Long id, Model model){
+//        Optional<GroupModel> byId = groupService.findById(id);
+//        if(byId.isEmpty()){
+//            return "redirect:/error";
+////            return "redirect:/form/books";
+//        }
+        GroupModel joiningUsers = groupService.findJoiningUsers(id);
+        model.addAttribute("groupForUser", joiningUsers);
+        return "admin/groups/adduser";
+    }
+
+    @PostMapping("/addUser/{id}")
+    @ResponseBody
+    private String addUserProceedForm(GroupModel groupModel){
+
+        groupModel.getUsers().stream()
+                .forEach(user -> {
+                    user.getGroups().add(groupModel);
+                    userService.save(user);
+                });
+        groupService.save(groupModel);
+        return groupModel.toString() + " users: "  +  groupModel.getUsers().toString();
+    }
+
+    @GetMapping("/{id}")
+    private String groupDetails(@PathVariable Long id, Model model){
+
+        Optional<GroupModel> optionalGroupModel = groupService.findById(id);
+
+//        GroupModel joiningUsers = groupService.findJoiningUsers(id);
+        if(optionalGroupModel.isPresent()){
+            model.addAttribute("group", groupService.findJoiningUsers(id));
+            return "admin/groups/details";
+        }
+        return "redirect:/admin/groups/notfound";
+    }
+    @GetMapping("/delete/{id}")
+    private String deleteGroup(@PathVariable Long id, Model model){
+        Optional<GroupModel> groupModelOptional = groupService.findById(id);
+        if(groupModelOptional.isPresent()){
+            model.addAttribute("toDelete", groupService.findById(id).get());
+
+            return "/admin/groups/delete";
+        }
+        return "redirect:/admin/groups/notfound";
+    }
+
+    @PostMapping("/delete/{id}")
+    private String proceedDeleteGroup(GroupModel groupModel){
+        GroupModel joiningUsers = groupService.findJoiningUsers(groupModel.getId());
+        List<User> users = joiningUsers.getUsers();
+        for (User user : users) {
+            user.getGroups().remove(joiningUsers);
+            userService.save(user);
+        }
+//        groupService.findJoiningUsers(groupModel.getId()).getUsers().stream()
+//                        .forEach(user -> {user.getGroups().remove(groupModel);
+//                        userService.save(user);});
+
+        groupService.deleteById(groupModel.getId());
+        return "redirect:/user/start";
+    }
+
+    @GetMapping("/notfound")
+    private String notFound(){
+        return "/notfound";
+    }
+
+                        // TEST LISTY GRUP Z WOLNYMI MIEJSCAMI!!!!
+
+
+
+    @GetMapping("freeplaces")
+    @ResponseBody
+    private String findGroupsWithFreePlaces(){
+        return groupService.findAllJoiningUsers().stream()
+                .map(groupModel -> groupModel.getName() + " size: " + groupModel.getSize() + " members: " + String.valueOf(groupModel.getUsers().size()))
+                .collect(Collectors.joining(" | ")) + "<br>  groupModelsWithFreePlaces: " + groupService.findGroupsWithFreePlaces().toString();
+    }
+
     @ModelAttribute("daysOfWeek")
     Collection<String> findAllGroups(){
         return dayOfWeekService.findAll();
+    }
+
+    @ModelAttribute("users")
+    Collection<User> findAllUsers(){
+        return userService.findAll();
     }
 
 

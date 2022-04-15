@@ -8,6 +8,7 @@ import pl.coderslab.repository.GroupModelRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -48,6 +49,22 @@ public class DBGroupService implements GroupService{
         GroupModel groupModel = groupModelRepository.findById(id).get();
         Hibernate.initialize(groupModel.getUsers());
         return groupModel;
+    }
+
+    @Override
+    public List<GroupModel> findAllJoiningUsers() {
+        List<GroupModel> groupModels = groupModelRepository.findAll();
+        groupModels.stream()
+                .forEach(groupModel -> Hibernate.initialize(groupModel.getUsers()));
+        return groupModels;
+    }
+
+    @Override
+    public List<GroupModel> findGroupsWithFreePlaces() {
+        List<GroupModel> groupModelsWithFreePlaces = findAllJoiningUsers().stream()
+                .filter(groupModel -> groupModel.getSize() >= groupModel.getUsers().size())
+                .collect(Collectors.toList());
+        return groupModelsWithFreePlaces;
     }
 
 

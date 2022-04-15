@@ -1,8 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Add Group</title>
     <style>
         [class*="col"] {
             padding: 1rem;
@@ -25,23 +26,18 @@
     </div>
 </div>
 
+<h2>Users: ${users}</h2>
+<h2>Group details: ${groupForUser}</h2>
+<form:form method="post" modelAttribute="groupForUser">
+    User:<form:select path="users" items="${users}" itemLabel="name" itemValue="id"/>
+    <form:hidden path="name"/>
+    <form:hidden path="dayOfWeek"/>
+    <form:hidden path="localTime"/>
+    <form:hidden path="size"/>
+    <input type="submit" value="Add Group">
+</form:form>
 
-<!--my-5 - marginesy-->
-<div class="container-lg my-5">
-    <div class="row">
-        <div class="col-2"><h2 class="text-dark">WELCOME</h2>
-            <a href="/registry"> Register </a>
-        </div>
-        <div class="col-10">
-            <form method="post">
-                <div><label> User Name : <input type="text" name="username"/> </label></div>
-                <div><label> Password: <input type="password" name="password"/> </label></div>
-                <div><input type="submit" value="Sign In"/></div>
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            </form></div>
-        </div>
-    </div>
-</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="../../resources/bootstrap.js"></script>

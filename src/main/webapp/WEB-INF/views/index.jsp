@@ -63,9 +63,9 @@
 
         </div>
         <div class="col">
-            <sec:authorize access="isAuthenticated()">
-                <a href="/user/start">Overview</a></div>
-            </sec:authorize>
+<%--            <sec:authorize access="isAuthenticated()">--%>
+                <a href="/user/start">More</a></div>
+<%--            </sec:authorize>--%>
         </div>
 
     </div>
@@ -74,20 +74,52 @@
 
 <h2 class="text-center t">other</h2>
 <div class="container-lg">
-    <div class="row">
+
         <div class="col">1</div>
-        <div class="col">2</div>
+        <div class="col">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <td>
+                        Name
+                    </td>
+                    <td>
+                        Day
+                    </td>
+                    <td>
+                        Hour
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${groups}" var="singleGroup">
+                    <tr>
+                        <td>
+                                ${singleGroup.getName()}
+                        </td>
+                        <td>
+                                ${singleGroup.getDayOfWeek()}
+                        </td>
+                        <td>
+                                ${singleGroup.getLocalTime()}
+                        </td>
+
+                    </tr>
+                </c:forEach>
+                </tbody>
+
+            </table>
+
+
+    </div>
+    <div class="row">
+        </div>
         <div class="col">3</div>
     </div>
-    <div class="row">
-        <div class="col-md-8">1</div>
-        <div class="col-md-4">2</div>
-    </div>
+
     <!--na sztywno:-->
-    <div class="row">
-        <div class="col-8">1</div>
-        <div class="col-4">2</div>
-    </div>
+
 </div>
 
 <h2 class="text-center t my-5">other - Gutter</h2>
