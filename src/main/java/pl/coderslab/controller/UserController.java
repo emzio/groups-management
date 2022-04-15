@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,8 @@ import pl.coderslab.entity.User;
 import pl.coderslab.service.GroupService;
 import pl.coderslab.service.UserService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,18 @@ public class UserController {
         this.groupService = groupService;
     }
 
+    @GetMapping("/user/start")
+    private String adminOrUserView(@AuthenticationPrincipal UserDetails customUser, Model model){
+
+        if (customUser != null && customUser.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
+            model.addAttribute("users", userService.findAll());
+            return "/admin/adminstart";
+        }
+        return "/user/userstart";
+    }
+
+
     @GetMapping("/registry")
     private String showUserAddForm(Model model){
         User user = new User();
@@ -33,22 +48,22 @@ public class UserController {
     }
 
     @PostMapping("/registry")
-    @ResponseBody
     private String proceedAddForm(User user){
         userService.saveUser(user);
-        return user.getUsername() + user.getEmail() + user.getRoles() + user.getPassword() + user.getGroups();
+        return "redirect:login";
     }
+
+
 
     @ModelAttribute("groups")
     Collection<GroupModel> findAllGroups(){
         return groupService.findAll();
     }
 
-
-//    @ModelAttribute("publishers")
-//    Collection<Publisher> findAllPublishers() {
-//        return publisherService.findAll();
-//    }
+    @ModelAttribute("freeGroups")
+    Collection<GroupModel> findAllGroupsWithFreePlaces(){
+        return groupService.findGroupsWithFreePlaces();
+    }
 
 
     // PONIŻEJ AKCJE TESTOWE - BEZ FORMULARZY !!!

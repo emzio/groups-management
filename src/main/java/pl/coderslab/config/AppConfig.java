@@ -12,16 +12,8 @@ public class AppConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/logout").setViewName("logout");
-        registry.addViewController("/user/start").setViewName("user/userstart");
+//        registry.addViewController("/user/start").setViewName("user/userstart");
         registry.addViewController("/403").setViewName("403");
     }
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addConverter(getCanceledClassesConverter());
-//    }
-//    @Bean
-//    public CanceledClassesConverter getCanceledClassesConverter() {
-//        return new CanceledClassesConverter();
-//    }
 
 }

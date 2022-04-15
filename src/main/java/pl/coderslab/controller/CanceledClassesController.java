@@ -27,11 +27,12 @@ public class CanceledClassesController {
     }
 
     @GetMapping("")
-    @ResponseBody
-    private String findAll(){
-        return canceledClassesService.findAll().stream()
-                .map(CanceledClasses::toString)
-                .collect(Collectors.joining(" | "));
+    private String findAll(Model model){
+        model.addAttribute("allCanceled", canceledClassesService.findAll());
+        return "admin/CanceledClasses/canceled";
+//        return canceledClassesService.findAll().stream()
+//                .map(CanceledClasses::toString)
+//                .collect(Collectors.joining(" | "));
     }
 
     // BAJZEL Z METODĄ POST:

@@ -1,13 +1,17 @@
 package pl.coderslab.service;
 
 import org.hibernate.Hibernate;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.Role;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.RoleRepository;
 import pl.coderslab.repository.UserRepository;
 
+import java.awt.print.Book;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -83,4 +87,5 @@ public class UserServiceImpl implements UserService {
     public void save(User user){
         userRepository.save(user);
     }
+
 }
