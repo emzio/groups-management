@@ -115,10 +115,10 @@
             </table>
         </div>
 
-<%--        Link do Canceled --%>
+<%--        Link do Canceled i Users --%>
         <div class="col-6">
                 <a href="/admin/canceled/">Canceled Classes Menu</a>
-            <a href="/admin/canceled/">Users Menu</a>
+            <a href="/admin/users">Users Menu</a>
         <div class="col-6">4</div>
     </div>
 </div>
