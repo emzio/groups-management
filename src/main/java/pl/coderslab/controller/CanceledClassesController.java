@@ -35,6 +35,13 @@ public class CanceledClassesController {
 //                .collect(Collectors.joining(" | "));
     }
 
+    @GetMapping("/delete/{id}")
+    private String deleteCanceledClass(@PathVariable Long id){
+        canceledClassesService.deleteById(id);
+        return "redirect:/admin/canceled";
+    }
+
+
     // BAJZEL Z METODĄ POST:
 
 ////    @PostMapping("/add")

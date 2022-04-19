@@ -68,7 +68,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) {
+        user.setEnabled(1);
+//        Role userRole = roleRepository.findByName("ROLE_USER");
+//        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+        String rawPassword = user.getPassword();
+        String formerPassword = userRepository.findById(user.getId()).get().getPassword();
+
+        User userPreUpdated = userRepository.findById(user.getId()).get();
+        user.setRoles(userPreUpdated.getRoles());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
+        if(rawPassword.equals(formerPassword)){
+//        if(rawPassword.equals(userPreUpdated.getPassword())){
+            user.setPassword(formerPassword);
+        }
         userRepository.save(user);
+
+
+//        String formerPassword = userRepository.findById(user.getId()).get().getPassword();
+//        String rawPassword = user.getPassword();
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        if(rawPassword.equals(formerPassword)){
+//            user.setPassword(formerPassword);
+//        }
+//        userRepository.save(user);
     }
 
     @Override

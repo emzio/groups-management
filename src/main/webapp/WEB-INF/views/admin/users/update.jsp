@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <head>
     <meta charset="UTF-8">
-    <title>Add Group</title>
+    <title>Registry</title>
     <style>
         [class*="col"] {
             padding: 1rem;
@@ -30,38 +30,25 @@
 <!--my-5 - marginesy-->
 <div class="container-lg my-5">
     <div class="row">
-        <div class="col-2"><h2 class="text-dark">
-            <a href="/admin/canceled/add"> Add new Date </a>
-            <a href="/user/start"> Back to main </a>
-        </h2>
+        <div class="col-2"><h2 class="text-dark">Registry form</h2>
         </div>
         <div class="col-10">
-            <table class="table">
-                <thead>
-                <tr>
-                    <td>
-                        Date
-                    </td>
-                    <td>
-                        Actions
-                    </td>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${allCanceled}" var="single">
-                    <tr>
-                        <td>
-                                ${single.getLocalDate()}
-                        </td>
-                        <td>
-                            <a href="/admin/canceled/delete/${single.getId()}"> Delete </a>
-                        </td>
 
-                    </tr>
-                </c:forEach>
-                </tbody>
 
-            </table>
+            <form:form method="post" modelAttribute="userToUpdate">
+                <div class="flex-container">
+
+                    Login:<form:input path="username"/>
+                        <%--                    <span>Rating: <form:input path="rating"/></span><form:errors path="rating"></form:errors>--%>
+                    Password: <form:input path="password"/>
+
+                    Name: <form:input path="name"/>
+                    lastname: <form:input path="lastName"/>
+                    email: <form:input path="email"/>
+                    Groups: <form:select path="groups" items="${groups}" itemLabel="name" itemValue="id"/>
+                </div>
+                <input type="submit" value="Register">
+            </form:form>
         </div>
     </div>
 </div>
@@ -72,8 +59,4 @@
 <script src="../../resources/bootstrap.js"></script>
 </body>
 </html>
-
-
-
-
 

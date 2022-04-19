@@ -17,30 +17,37 @@
     <link rel="stylesheet" href="../../resources/bootstrap.css">
 </head>
 <body>
-<div class="container-lg  ">
-    <div class="row">
-        <!--        <div class="row g-5">-->
-        <div class="m-5">
-            <h2 class="text-center m-6">management in the organization of group activities</h2>
-        </div>
-    </div>
-</div>
+
 
 
 <!--my-5 - marginesy-->
 <div class="container-lg my-5">
     <div class="row">
-        <div class="col-2"><h2 class="text-dark">
-            <a href="/admin/canceled/add"> Add new Date </a>
+        <div class="col-2">
+            <h2 class="text-dark">Add Group</h2>
+            <br>
+            <a href="/registry"> Create new user</a>
+            <br>
+            <a href="/admin/users/addadmin"> Create new admin </a>
+            <br>
             <a href="/user/start"> Back to main </a>
-        </h2>
+
         </div>
         <div class="col-10">
             <table class="table">
                 <thead>
                 <tr>
                     <td>
-                        Date
+                        Name
+                    </td>
+                    <td>
+                        Lastname
+                    </td>
+                    <td>
+                        Email
+                    </td>
+                    <td>
+                        Groups
                     </td>
                     <td>
                         Actions
@@ -48,13 +55,23 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${allCanceled}" var="single">
+                <c:forEach items="${users}" var="singleUser">
                     <tr>
                         <td>
-                                ${single.getLocalDate()}
+                                ${singleUser.getName()}
                         </td>
                         <td>
-                            <a href="/admin/canceled/delete/${single.getId()}"> Delete </a>
+                                ${singleUser.getLastName()}
+                        </td>
+                        <td>
+                                ${singleUser.getEmail()}
+                        </td>
+                        <td>
+                                ${singleUser.getGroups()}
+                        </td>
+                        <td>
+                            <a href="/admin/users/update/${singleUser.getId()}"> Update </a>
+                            <a href="/admin/users/delete/${singleUser.getId()}"> Delete </a>
                         </td>
 
                     </tr>
@@ -62,6 +79,7 @@
                 </tbody>
 
             </table>
+        </div>
         </div>
     </div>
 </div>
@@ -72,8 +90,4 @@
 <script src="../../resources/bootstrap.js"></script>
 </body>
 </html>
-
-
-
-
 
