@@ -79,6 +79,8 @@
 
             </table>
 
+
+
             <table class="table">
                 <thead>
                 <tr>
@@ -119,7 +121,40 @@
             </table>
         </div>
     </div>
-</div>
+<%--    </div>--%>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="link-info">
+                <a href="/admin/groups/month/${group.getId()}"> Another month </a>
+            </div>
+
+            <table class="table-bordered">
+                <thead>
+                <tr>
+                    <c:forEach items="${daysOfWeek}" var="day">
+                        <td>
+                                ${day}
+                        </td>
+                    </c:forEach>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${weeks}" var="week">
+                    <tr>
+                        <c:forEach items="${week}" var="cell">
+                            <td>
+                                    ${cell.getDate()}
+                                    ${cell.getDay()}
+                                    ${cell.getDescription()}
+                            </td>
+                        </c:forEach>
+                    </tr>
+                </c:forEach>
+                </tbody>
+
+            </table>
+    </div>
 </div>
 
 
