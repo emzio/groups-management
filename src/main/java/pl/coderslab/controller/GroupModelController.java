@@ -3,21 +3,13 @@ package pl.coderslab.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
-import pl.coderslab.service.CanceledClassesService;
-import pl.coderslab.service.DayOfWeekService;
-import pl.coderslab.service.GroupService;
-import pl.coderslab.service.UserService;
+import pl.coderslab.service.*;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,12 +20,14 @@ public class GroupModelController {
     private final CanceledClassesService canceledClassesService;
     private final UserService userService;
     private final DayOfWeekService dayOfWeekService;
+    private final CalendarCellService calendarCellService;
 
-    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService) {
+    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService, CalendarCellService calendarCellService) {
         this.groupService = groupService;
         this.canceledClassesService = canceledClassesService;
         this.userService = userService;
         this.dayOfWeekService = dayOfWeekService;
+        this.calendarCellService = calendarCellService;
     }
 
     @GetMapping("/add")
@@ -100,18 +94,74 @@ public class GroupModelController {
         return groupModel.toString() + " users: "  +  groupModel.getUsers().toString();
     }
 
-    @GetMapping("/{id}")
-    private String groupDetails(@PathVariable Long id, Model model){
+    @GetMapping("/month/{groupId}")
+    private String showSelectMonthForm(Model model, @PathVariable Long groupId){
+        model.addAttribute("groupId", groupId);
+        return "admin/groups/selectMonth";
+    }
 
-        Optional<GroupModel> optionalGroupModel = groupService.findById(id);
+    @GetMapping("/monthtest")
+    private String proceedSelectMonthForm(Model model, @RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
+        String date = String.valueOf(LocalDate.of(year, month, 1));
+        return "redirect:/admin/groups/"+ groupId+"?date="+date.toString();
+//        return "redirect:/admin/groups/"+ groupId+"/"+date.toString();
+    }
 
-//        GroupModel joiningUsers = groupService.findJoiningUsers(id);
+    @GetMapping({"/{groupId}", "/{groupId}/{date}"})
+    private String groupDetails(@RequestParam(required = false) String date, @PathVariable Long groupId, Model model){
+
+        Optional<GroupModel> optionalGroupModel = groupService.findById(groupId);
+
         if(optionalGroupModel.isPresent()){
-            model.addAttribute("group", groupService.findJoiningUsers(id));
+            model.addAttribute("group", groupService.findJoiningUsers(groupId));
+            Month month = LocalDate.now().getMonth();
+            Year year = Year.of(LocalDate.now().getYear());
+
+            if(date!=null){
+                LocalDate localDate = LocalDate.parse(date);
+                month = localDate.getMonth();
+                year = Year.of(localDate.getYear());
+            }
+
+            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
+            List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
+            Map<Integer, List<CalendarCell>> cellsMap =
+                    cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
+            List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+            model.addAttribute("weeks", weeks);
+
             return "admin/groups/details";
         }
         return "redirect:/admin/groups/notfound";
     }
+
+//    @GetMapping({"/{groupId}", "/{groupId}/{date}"})
+//    private String groupDetails(@PathVariable(required = false) String date, @PathVariable Long groupId, Model model){
+//
+//        Optional<GroupModel> optionalGroupModel = groupService.findById(groupId);
+//
+//        if(optionalGroupModel.isPresent()){
+//            model.addAttribute("group", groupService.findJoiningUsers(groupId));
+//            Month month = LocalDate.now().getMonth();
+//            Year year = Year.of(LocalDate.now().getYear());
+//
+//            if(date!=null){
+//                LocalDate localDate = LocalDate.parse(date);
+//                month = localDate.getMonth();
+//                year = Year.of(localDate.getYear());
+//            }
+//
+//            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
+//            List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
+//            Map<Integer, List<CalendarCell>> cellsMap =
+//                    cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
+//            List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+//            model.addAttribute("weeks", weeks);
+//
+//            return "admin/groups/details";
+//        }
+//        return "redirect:/admin/groups/notfound";
+//    }
     @GetMapping("/delete/{id}")
     private String deleteGroup(@PathVariable Long id, Model model){
         Optional<GroupModel> groupModelOptional = groupService.findById(id);
