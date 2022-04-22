@@ -2,10 +2,7 @@ package pl.coderslab.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.service.CalendarCellService;
 import pl.coderslab.service.DayOfWeekService;
@@ -45,6 +42,15 @@ public class CalendarCellController {
 
     // Testowe @ResponseBody:
 
+
+    @GetMapping("/admin/cells/user/{userId}/{monthInt}/{yearInt}")
+    @ResponseBody
+    private String groupForUser(Model model, @PathVariable Long userId, @PathVariable int monthInt, @PathVariable int yearInt){
+        List<CalendarCell> cells = calendarCellService.calendarCardForUser(userId, Month.of(monthInt), Year.of(yearInt));
+        return cells.stream()
+                .map(CalendarCell::toString)
+                .collect(Collectors.joining("<br>"));
+    }
 
     @GetMapping("/admin/dates/{groupId}/{month}/{year}")
     @ResponseBody

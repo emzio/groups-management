@@ -101,22 +101,28 @@ public class GroupModelController {
     }
 
     @GetMapping("/monthtest")
-    @ResponseBody
-    private String proceedSelectMonthForm(Model model, @RequestParam String date){
-        model.addAttribute("date", date);
-        return date;
+    private String proceedSelectMonthForm(Model model, @RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
+        String date = String.valueOf(LocalDate.of(year, month, 1));
+        return "redirect:/admin/groups/"+ groupId+"?date="+date.toString();
+//        return "redirect:/admin/groups/"+ groupId+"/"+date.toString();
     }
 
-    @GetMapping("/{groupId}")
-    private String groupDetails(@PathVariable Long groupId, Model model){
+    @GetMapping({"/{groupId}", "/{groupId}/{date}"})
+    private String groupDetails(@RequestParam(required = false) String date, @PathVariable Long groupId, Model model){
 
         Optional<GroupModel> optionalGroupModel = groupService.findById(groupId);
 
         if(optionalGroupModel.isPresent()){
             model.addAttribute("group", groupService.findJoiningUsers(groupId));
-
             Month month = LocalDate.now().getMonth();
             Year year = Year.of(LocalDate.now().getYear());
+
+            if(date!=null){
+                LocalDate localDate = LocalDate.parse(date);
+                month = localDate.getMonth();
+                year = Year.of(localDate.getYear());
+            }
+
             model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
             List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
             Map<Integer, List<CalendarCell>> cellsMap =
@@ -128,6 +134,34 @@ public class GroupModelController {
         }
         return "redirect:/admin/groups/notfound";
     }
+
+//    @GetMapping({"/{groupId}", "/{groupId}/{date}"})
+//    private String groupDetails(@PathVariable(required = false) String date, @PathVariable Long groupId, Model model){
+//
+//        Optional<GroupModel> optionalGroupModel = groupService.findById(groupId);
+//
+//        if(optionalGroupModel.isPresent()){
+//            model.addAttribute("group", groupService.findJoiningUsers(groupId));
+//            Month month = LocalDate.now().getMonth();
+//            Year year = Year.of(LocalDate.now().getYear());
+//
+//            if(date!=null){
+//                LocalDate localDate = LocalDate.parse(date);
+//                month = localDate.getMonth();
+//                year = Year.of(localDate.getYear());
+//            }
+//
+//            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
+//            List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
+//            Map<Integer, List<CalendarCell>> cellsMap =
+//                    cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
+//            List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+//            model.addAttribute("weeks", weeks);
+//
+//            return "admin/groups/details";
+//        }
+//        return "redirect:/admin/groups/notfound";
+//    }
     @GetMapping("/delete/{id}")
     private String deleteGroup(@PathVariable Long id, Model model){
         Optional<GroupModel> groupModelOptional = groupService.findById(id);

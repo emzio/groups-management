@@ -34,7 +34,9 @@
         </div>
         <div class="col-10">
             <form method="get" action="/admin/groups/monthtest" >
-                <input type="date" name="date">
+                month <input type="number"  name="month">
+                year <input type="number" name="year">
+                <input type="hidden" name="groupId" value="${groupId}">
                 <input type="submit" value="Add Group">
             </form>
         </div>

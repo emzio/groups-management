@@ -3,6 +3,7 @@ package pl.coderslab.service;
 import org.springframework.stereotype.Service;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.User;
 import pl.coderslab.repository.CanceledClassesRepository;
 import pl.coderslab.repository.GroupModelRepository;
 import pl.coderslab.repository.UserRepository;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class CalendarCellService {
@@ -19,7 +21,6 @@ public class CalendarCellService {
     private final UserRepository userRepository;
     private final GroupModelRepository groupModelRepository;
     private final CanceledClassesRepository canceledClassesRepository;
-
 
     public CalendarCellService(UserRepository userRepository, GroupModelRepository groupModelRepository, CanceledClassesRepository canceledClassesRepository) {
         this.userRepository = userRepository;
@@ -80,6 +81,36 @@ public class CalendarCellService {
         }
         return cells;
     }
+
+    public List<CalendarCell> calendarCardForUser(Long userId, Month month, Year year){
+        Optional<User> userOptional = userRepository.findById(userId);
+        List<CalendarCell> cells = emptyCalendarCard(month, year);
+        if(userOptional.isPresent()){
+            List<GroupModel> groups = userOptional.get().getGroups();
+
+            for (GroupModel group : groups) {
+                List<CalendarCell> cellsForGroup = calendarCardForGroup(group.getId(), month, year);
+                List<LocalDate> dates = cellsForGroup.stream()
+                        .filter(calendarCell -> calendarCell.getDescription() != null)
+                        .map(calendarCell -> calendarCell.getDate())
+                        .collect(Collectors.toList());
+                cells.stream()
+                        .forEach(calendarCell -> {
+                            if(dates.contains(calendarCell.getDate())){
+                                int index = IntStream.range(0, cellsForGroup.size())
+                                        .filter(i -> cellsForGroup.get(i).getDate().equals(calendarCell.getDate()))
+                                        .findFirst()
+                                        .orElse(-1);
+
+                                calendarCell.setDescription(calendarCell.getDescription() + cellsForGroup.get(index).getDescription()+calendarCell.getDate());
+                            }
+                        });
+            }
+        }
+        return cells;
+    }
+
+            // PONIŻEJ TESTOWE DO USUNIĘCIA?
 
     public List<LocalDate> datesForGroupById(Long id, int monthNumber, int year){
 
