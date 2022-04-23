@@ -6,20 +6,25 @@
 
 
 <div class="col-12">
-    <h2>Users: ${users}</h2>
-    <h2>Group details: ${groupForUser}</h2>
     <div class="card">
         <div class="card-body, text-black-50">
             <form:form method="post" modelAttribute="groupForUser">
-                User:<form:select path="users" items="${users}" itemLabel="name" itemValue="id"/>
+                <div class="form-label"> User:</div>
+                <form:select path="users" items="${users}" itemLabel="name" itemValue="id" cssClass="form-select"/>
                 <form:hidden path="name"/>
                 <form:hidden path="dayOfWeek"/>
                 <form:hidden path="localTime"/>
                 <form:hidden path="size"/>
-                <input type="submit" value="Add Group">
+                <input type="submit" value="Add User" class="btn btn-primary">
             </form:form>
         </div>
     </div>
+</div>
+<div class="col-12">
+
+        <a href="http://localhost:8080/" type="button" class="btn btn-success" >main</a>
+        <a href="http://localhost:8080/" type="button" class="btn btn-info" onClick="history.go(-1)">back</a>
+
 </div>
 <script src="https://unpkg.com/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
 <script src="../../../../resources/bootstrap.js"></script>
