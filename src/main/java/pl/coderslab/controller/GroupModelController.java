@@ -118,7 +118,6 @@ public class GroupModelController {
     }
 
     // select month for CalendarCard
-
     @GetMapping("/month/{groupId}")
     private String showSelectMonthForm(Model model, @PathVariable Long groupId){
         model.addAttribute("groupId", groupId);

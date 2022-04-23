@@ -25,7 +25,9 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>
             <hr class="my-3">
-            <a href="/registry"> Register </a>
+            <a href="/registry" class="btn btn-info"> Register </a>
+            <a type="button" class="btn btn-secondary" onClick="history.go(-1)">back</a>
+            <hr class="my-3">
         </div>
     </div>
 <%--</div>--%>

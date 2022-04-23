@@ -22,7 +22,7 @@ public class GroupModel {
 
     private String name;
 
-//    @DateTimeFormat(pattern = "E")
+//    @DateTimeFormat(pattern = "EEE")
     private DayOfWeek dayOfWeek;
 
     @DateTimeFormat(pattern = "HHmm")
