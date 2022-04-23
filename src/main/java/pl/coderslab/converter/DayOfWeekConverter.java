@@ -14,17 +14,6 @@ public class DayOfWeekConverter implements Converter<String, DayOfWeek> {
 
     @Override
     public DayOfWeek convert(String source) {
-//        DayOfWeek dayOfWeek = null;
-//                switch (source) {
-//            case "SUNDAY":
-//                dayOfWeek = (DayOfWeek.SUNDAY);
-//                break;
-//            case "SATURDAY":
-//                dayOfWeek = (DayOfWeek.SATURDAY);
-//                break;
-//            default:
-//                dayOfWeek = DayOfWeek.valueOf(source);
-//        }
         DayOfWeek dayOfWeek = DayOfWeek.valueOf(source);
         return dayOfWeek;
     }

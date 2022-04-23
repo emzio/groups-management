@@ -19,6 +19,14 @@ public class CanceledClassesController {
         this.canceledClassesService = canceledClassesService;
     }
 
+    //findAll
+    @GetMapping("")
+    private String findAll(Model model){
+        model.addAttribute("allCanceled", canceledClassesService.findAll());
+        return "admin/CanceledClasses/canceled";
+    }
+
+    //add
     @GetMapping("/add")
     private String showAddForm(Model model){
         CanceledClasses canceledClasses = new CanceledClasses();
@@ -26,67 +34,17 @@ public class CanceledClassesController {
         return "admin/canceledAdd";
     }
 
-    @GetMapping("")
-    private String findAll(Model model){
-        model.addAttribute("allCanceled", canceledClassesService.findAll());
-        return "admin/CanceledClasses/canceled";
-//        return canceledClassesService.findAll().stream()
-//                .map(CanceledClasses::toString)
-//                .collect(Collectors.joining(" | "));
+    @PostMapping("/add")
+    private String proceedAddForm(CanceledClasses canceledClasses){
+        canceledClassesService.save(canceledClasses);
+        return "redirect:/admin/canceled";
     }
 
+    //delete
     @GetMapping("/delete/{id}")
     private String deleteCanceledClass(@PathVariable Long id){
         canceledClassesService.deleteById(id);
         return "redirect:/admin/canceled";
-    }
-
-
-    // BAJZEL Z METODĄ POST:
-
-////    @PostMapping("/add")
-//    @GetMapping("add2")
-//    @ResponseBody
-//    private String proceedAddForm(@RequestParam String dateTest){
-////        private String proceedAddForm(){
-//        CanceledClasses canceledClasses = new CanceledClasses();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-//        LocalDate localDate = (LocalDate.parse(dateTest,formatter));
-//        canceledClasses.setLocalDate(localDate);
-//        canceledClassesService.save(canceledClasses);
-//        return "saved: " + canceledClasses;
-//    }
-//
-//    @PostMapping("/add2")
-//    @ResponseBody
-//    private String proceedAddFormPost(@RequestParam String dateTest){
-////        private String proceedAddForm(){
-//        CanceledClasses canceledClasses = new CanceledClasses();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-//        LocalDate localDate = (LocalDate.parse(dateTest,formatter));
-//        canceledClasses.setLocalDate(localDate);
-//        canceledClassesService.save(canceledClasses);
-//        return "saved: " + canceledClasses;
-//    }
-
-    // BAJZEL Z METODĄ POST (KONIEC)
-
-    @PostMapping("/add")
-    @ResponseBody
-    private String proceedAddForm(CanceledClasses canceledClasses){
-        canceledClassesService.save(canceledClasses);
-        return "saved: " + canceledClasses;
-    }
-
-    @GetMapping("/canceled/{date}")
-    @ResponseBody
-    private String addCanceledClass(@PathVariable String date){
-        CanceledClasses canceledClasses = new CanceledClasses();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate localDate = (LocalDate.parse(date,formatter));
-        canceledClasses.setLocalDate(localDate);
-        canceledClassesService.save(canceledClasses);
-        return canceledClasses.toString();
     }
 
 }
