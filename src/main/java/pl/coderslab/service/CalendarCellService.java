@@ -112,78 +112,65 @@ public class CalendarCellService {
 
             // PONIŻEJ TESTOWE DO USUNIĘCIA?
 
-    public List<LocalDate> datesForGroupById(Long id, int monthNumber, int year){
-
-        List<LocalDate> monthDateList = new ArrayList<>();
-
-        Optional<GroupModel> optionalGroupModel = groupModelRepository.findById(id);
-        if(optionalGroupModel.isPresent()){
-            GroupModel groupModel = optionalGroupModel.get();
-            Year actualYear = Year.of(year);
-            Month actualMonth = Month.of(monthNumber);
-            int length = actualMonth.length(Year.isLeap(actualYear.getValue()));
-
-            for (int i = 1; i <= length; i++) {
-                if(LocalDate.of(actualYear.getValue(), actualMonth, i).getDayOfWeek().equals(groupModel.getDayOfWeek())){
-                    monthDateList.add(LocalDate.of(actualYear.getValue(), actualMonth, i));
-                }
-            }
-
-            canceledClassesRepository.findAll().stream()
-                    .map(canceledClasses -> canceledClasses.getLocalDate())
-                    .forEach(localDate -> {if(monthDateList.contains(localDate)){
-                        monthDateList.remove(localDate);
-                    }
-                    });
-        }
-
-        return monthDateList;
-    }
-
-    public List<CalendarCell> cellsForGroupById(Long id, int monthNumber, int yearNumber) {
-
-        Optional<GroupModel> optionalGroupModel = groupModelRepository.findById(id);
-
-        List<LocalDate> classDatesForGroup = datesForGroupById(id, monthNumber, yearNumber);
-        List<CalendarCell> cells = new ArrayList<>();
-        if(optionalGroupModel.isPresent()){
-            GroupModel groupModel = optionalGroupModel.get();
-            //        Year year = Year.of(yearNumber);
-            Month month = Month.of(monthNumber);
-            int length = month.length(Year.isLeap(yearNumber));
-//        int length = Month.of(monthNumber).length(Year.isLeap(yearNumber));
-
-//        DayOfWeek firstDayOfMonth = LocalDate.of(yearNumber, monthNumber, 1).getDayOfWeek();
-//        for (int i = 1; i <= 7; i++) {
-//            if(DayOfWeek.of(i).equals(firstDayOfMonth)){
-//                break;
+//    public List<LocalDate> datesForGroupById(Long id, int monthNumber, int year){
+//
+//        List<LocalDate> monthDateList = new ArrayList<>();
+//
+//        Optional<GroupModel> optionalGroupModel = groupModelRepository.findById(id);
+//        if(optionalGroupModel.isPresent()){
+//            GroupModel groupModel = optionalGroupModel.get();
+//            Year actualYear = Year.of(year);
+//            Month actualMonth = Month.of(monthNumber);
+//            int length = actualMonth.length(Year.isLeap(actualYear.getValue()));
+//
+//            for (int i = 1; i <= length; i++) {
+//                if(LocalDate.of(actualYear.getValue(), actualMonth, i).getDayOfWeek().equals(groupModel.getDayOfWeek())){
+//                    monthDateList.add(LocalDate.of(actualYear.getValue(), actualMonth, i));
+//                }
 //            }
-//            cells.add(new CalendarCell(LocalDate.of(yearNumber, monthNumber-1, i)));
+//
+//            canceledClassesRepository.findAll().stream()
+//                    .map(canceledClasses -> canceledClasses.getLocalDate())
+//                    .forEach(localDate -> {if(monthDateList.contains(localDate)){
+//                        monthDateList.remove(localDate);
+//                    }
+//                    });
 //        }
-
-            LocalDate firstDayOfMonth = LocalDate.of(yearNumber, monthNumber, 1);
-            int periodInt = firstDayOfMonth.getDayOfWeek().getValue() - DayOfWeek.MONDAY.getValue();
-
-            for (int i = periodInt; i > 0 ; i--) {
-                cells.add(new CalendarCell(LocalDate.of(yearNumber, monthNumber, 1).minus(Period.ofDays(i))));
-            }
-
-            for (int i = 1; i <= length; i++) {
-                cells.add(new CalendarCell(LocalDate.of(yearNumber, monthNumber, i)));
-            }
-
-            cells.stream()
-                    .forEach(calendarCell -> {
-                        if (classDatesForGroup.contains(calendarCell.getDate())) {
-                            calendarCell.setDay(groupModel.getDayOfWeek().toString());
-                            calendarCell.setDescription(groupModel.getName() + " " + groupModel.getLocalTime().toString());
-                        }
-//                    classDatesForGroup.stream()
-//                            .filter();
-
-                    });
-
-        }
-        return cells;
-    }
+//
+//        return monthDateList;
+//    }
+//
+//    public List<CalendarCell> cellsForGroupById(Long id, int monthNumber, int yearNumber) {
+//
+//        Optional<GroupModel> optionalGroupModel = groupModelRepository.findById(id);
+//
+//        List<LocalDate> classDatesForGroup = datesForGroupById(id, monthNumber, yearNumber);
+//        List<CalendarCell> cells = new ArrayList<>();
+//        if(optionalGroupModel.isPresent()){
+//            GroupModel groupModel = optionalGroupModel.get();
+//            Month month = Month.of(monthNumber);
+//            int length = month.length(Year.isLeap(yearNumber));
+//
+//            LocalDate firstDayOfMonth = LocalDate.of(yearNumber, monthNumber, 1);
+//            int periodInt = firstDayOfMonth.getDayOfWeek().getValue() - DayOfWeek.MONDAY.getValue();
+//
+//            for (int i = periodInt; i > 0 ; i--) {
+//                cells.add(new CalendarCell(LocalDate.of(yearNumber, monthNumber, 1).minus(Period.ofDays(i))));
+//            }
+//
+//            for (int i = 1; i <= length; i++) {
+//                cells.add(new CalendarCell(LocalDate.of(yearNumber, monthNumber, i)));
+//            }
+//
+//            cells.stream()
+//                    .forEach(calendarCell -> {
+//                        if (classDatesForGroup.contains(calendarCell.getDate())) {
+//                            calendarCell.setDay(groupModel.getDayOfWeek().toString());
+//                            calendarCell.setDescription(groupModel.getName() + " " + groupModel.getLocalTime().toString());
+//                        }
+//                    });
+//
+//        }
+//        return cells;
+//    }
 }

@@ -7,13 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
-import pl.coderslab.service.CurrentUser;
 import pl.coderslab.service.GroupService;
 import pl.coderslab.service.UserService;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -37,6 +35,13 @@ public class UserController {
         return "/user/userstart";
     }
 
+    // findAll
+    @GetMapping("/admin/users")
+    private String findAllUsers(Model model){
+        model.addAttribute("users", userService.findAll());
+        return "/admin/users/users";
+    }
+    // add admin
     @GetMapping("/admin/users/addadmin")
     private String showAdminAddForm(Model model){
         User user = new User();
@@ -49,6 +54,8 @@ public class UserController {
         userService.saveAdmin(user);
         return "redirect:/admin/users";
     }
+
+    //add user
 
     @GetMapping("/registry")
     private String showUserAddForm(Model model){
@@ -63,11 +70,7 @@ public class UserController {
         return "redirect:login";
     }
 
-    @GetMapping("/admin/users")
-    private String findAllUsers(Model model){
-        model.addAttribute("users", userService.findAll());
-        return "/admin/users/users";
-    }
+    //delete
 
     @GetMapping("admin/users/delete/{id}")
     private String deleteUser(@PathVariable Long id){
@@ -75,6 +78,7 @@ public class UserController {
         return "redirect:/admin/users";
     }
 
+    //update
     @GetMapping("/admin/users/update/{id}")
     private String showUserUpdateForm(@PathVariable Long id, Model model){
         Optional<User> optionalUser = userService.findById(id);
@@ -85,20 +89,8 @@ public class UserController {
         return "redirect:/admin/groups/notfound";
     }
 
-
-
     @PostMapping("/admin/users/update/{id}")
-//    @ResponseBody
     private String proceedUserUpdateForm(User user){
-//        String formerPassword = userService.findById(user.getId()).get().getPassword();
-//        String result = "Zmieniono hasło!!!";
-//            if(user.getPassword().equals(formerPassword)){
-//                user.setPassword(formerPassword);
-//                result = "Nie zmieniono hasła";
-//
-//        }
-//            userService.save(user);
-//        return result;
         userService.update(user);
         return "redirect:/admin/users";
     }
@@ -115,27 +107,6 @@ public class UserController {
 
 
     // PONIŻEJ AKCJE TESTOWE - BEZ FORMULARZY !!!
-
-    @GetMapping("admin/userwg/{id}")
-    @ResponseBody
-    private String userWithGroupList(@PathVariable Long id){
-        return userService.findByIdWithGroups(id).getGroups().toString();
-    }
-
-    @GetMapping("/create-user/{userName}")
-    @ResponseBody
-    public String createUser(@PathVariable String userName) {
-        User user = new User();
-        user.setUsername(userName);
-        user.setPassword("admin");
-        user.setEmail("email@domena.pl");
-        user.setName("Michal");
-        user.setLastName("Ziółkowski");
-        user.getGroups();
-        userService.saveUser(user);
-        return "admin";
-    }
-
     @GetMapping("/create-admin")
     @ResponseBody
     private String createAdmin(){
@@ -145,42 +116,4 @@ public class UserController {
         userService.saveAdmin(user);
         return "admin2";
     }
-
-    @GetMapping("/admin/infoadmin")
-    @ResponseBody
-    public String userInfo(@AuthenticationPrincipal UserDetails customUser) {
-//        log.info("customUser class {} " , customUser.getClass());
-        return "You are logged as " + customUser;
-    }
-
-    @GetMapping("/admin/users2")
-    @ResponseBody
-    private String findAll(){
-        String result = userService.findAll().stream()
-                .map(user ->
-                        String.join(" ; ", user.getUsername(), user.getEmail(), user.getName(), user.getLastName(), user.getRoles().toString()))
-//        String.join(" ; ", user.getUsername(), user.getRoles().toString()))
-                .collect(Collectors.joining(" | "));
-        return result.toString();
-    }
-
-    @GetMapping("/admin/info")
-    @ResponseBody
-    public String admin(@AuthenticationPrincipal CurrentUser customUser) {
-        User entityUser = customUser.getUser();
-        return "Hello " + entityUser.getUsername() + entityUser.getRoles().toString();
-    }
-
-//    @GetMapping("/admin/user/add")
-//    @ResponseBody
-//    private String add(){
-//        User user = new User();
-//        User.setEmail("email@domain.pl");
-//        User.setName("Name");
-//        User.setLastName("Lastname");
-////        GroupModel groupModel = dbGroupService.findById(2l).get();
-////        customer.getGroups().add(groupModel);
-//        userService.save(user);
-//        return User.toString();
-//    }
 }
