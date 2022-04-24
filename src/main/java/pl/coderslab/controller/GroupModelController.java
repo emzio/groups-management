@@ -148,7 +148,7 @@ public class GroupModelController {
                 year = Year.of(localDate.getYear());
             }
 
-            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
+//            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
             List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
             Map<Integer, List<CalendarCell>> cellsMap =
                     cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
