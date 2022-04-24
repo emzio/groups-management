@@ -124,11 +124,11 @@ public class GroupModelController {
         return "admin/groups/selectMonth";
     }
 
-    @GetMapping("/monthtest")
-    private String proceedSelectMonthForm(Model model, @RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
+//    @GetMapping("/monthtest")
+    @PostMapping("/monthtest")
+    public String proceedSelectMonthForm(@RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
         String date = String.valueOf(LocalDate.of(year, month, 1));
         return "redirect:/admin/groups/"+ groupId+"?date="+date.toString();
-//        return "redirect:/admin/groups/"+ groupId+"/"+date.toString();
     }
 
 //    GroupDetails

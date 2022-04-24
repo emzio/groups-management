@@ -9,6 +9,8 @@
 
 <div class="col-12">
     <a href="/user/start" class="btn btn-success">Groups menu</a>
+    <a href="/registry" class="btn btn-secondary"> Create new user</a>
+    <a href="/admin/users/addadmin" class="btn btn-danger"> Create new admin </a>
 </div>
 
 <div class="col-12">
