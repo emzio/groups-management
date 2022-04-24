@@ -36,7 +36,18 @@
                     <form:radiobuttons path="dayOfWeek" items="${daysOfWeek}"></form:radiobuttons>
                     Time: <form:input path="localTime"/>
                     Size: <form:input path="size"/>
-                    User:<form:select path="users" items="${users}" itemLabel="name" itemValue="id"/>
+                    User:<form:select path="users" multiple="true">
+                    <c:forEach items="${users}" var="u">
+                        <c:choose>
+                            <c:when test="${groupModel.userListId.contains(u.id)}">
+                                <form:option value="${u.id}" label="${u.name}" selected="true" />
+                            </c:when>
+                            <c:otherwise>
+                                <form:option value="${u.id}" label="${u.name}"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </form:select>
                 </div>
                 <input type="submit" value="Add Group">
             </form:form>

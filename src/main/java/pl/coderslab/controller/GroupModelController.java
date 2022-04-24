@@ -100,20 +100,8 @@ public class GroupModelController {
     }
 
     @PostMapping("/update/{id}")
-    private String proceedUpdateForm(GroupModel groupModel){
-        GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
-        List<User> formerUsers = groupToUpdate.getUsers();
-        formerUsers.stream()
-                        .forEach(user -> {
-                            user.getGroups().remove(groupToUpdate);
-                            userService.save(user);
-                        });
-        groupModel.getUsers().stream()
-                        .forEach(user -> {
-                            user.getGroups().add(groupModel);
-                            userService.save(user);
-                        });
-        groupService.save(groupModel);
+    public String proceedUpdateForm(GroupModel groupModel){
+        groupService.editGroupModel(groupModel);
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 

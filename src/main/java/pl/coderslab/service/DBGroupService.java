@@ -4,6 +4,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.User;
 import pl.coderslab.repository.GroupModelRepository;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class DBGroupService implements GroupService{
     private final GroupModelRepository groupModelRepository;
+    private final UserService userService;
 
-    public DBGroupService(GroupModelRepository groupModelRepository) {
+    public DBGroupService(GroupModelRepository groupModelRepository, UserService userService) {
         this.groupModelRepository = groupModelRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -67,5 +70,24 @@ public class DBGroupService implements GroupService{
         return groupModelsWithFreePlaces;
     }
 
-
+    @Override
+    @Transactional
+    public void editGroupModel(GroupModel groupModel) {
+        GroupModel groupToUpdate = findJoiningUsers(groupModel.getId());
+        groupToUpdate.getUsers().forEach(user -> {
+            user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
+            userService.save(user);
+        });
+        groupToUpdate.getUsers().removeIf(u -> !groupModel.getUsers().stream().map(User::getId).collect(Collectors.toList()).contains(u.getId()));
+        save(groupToUpdate);
+        groupToUpdate.setUsers(groupModel.getUsers());
+        groupToUpdate.getUsers()
+                .forEach(user -> {
+                    if (!user.getGroups().stream().map(GroupModel::getId).collect(Collectors.toList()).contains(groupModel.getId())) {
+                        user.getGroups().add(groupModel);
+                        userService.save(user);
+                    }
+                });
+        save(groupToUpdate);
+    }
 }

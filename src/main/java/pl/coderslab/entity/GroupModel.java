@@ -7,6 +7,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 //@Table(name = "other")
@@ -17,7 +18,7 @@ public class GroupModel {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany(mappedBy = "groups", cascade = CascadeType.MERGE)
     private List<User> users = new ArrayList<>();
 
     private String name;
@@ -50,6 +51,12 @@ public class GroupModel {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public List<Long> getUserListId() {
+        return users.stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
     }
 
     public void setUsers(List<User> users) {

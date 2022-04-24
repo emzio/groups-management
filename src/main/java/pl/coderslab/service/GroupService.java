@@ -22,4 +22,6 @@ public interface GroupService {
     List<GroupModel> findAllJoiningUsers();
 
     List<GroupModel> findGroupsWithFreePlaces();
+
+    void editGroupModel(GroupModel groupModel);
 }
