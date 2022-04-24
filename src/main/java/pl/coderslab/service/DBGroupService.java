@@ -4,6 +4,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.User;
 import pl.coderslab.repository.GroupModelRepository;
 
 import java.util.List;
@@ -68,4 +69,8 @@ public class DBGroupService implements GroupService{
     }
 
 
+    @Override
+    public boolean verificationOfOversize(Long groupId, List<User> users){
+        return findById(groupId).get().getSize() >= users.size();
+    }
 }

@@ -44,8 +44,12 @@ public class GroupModelController {
     }
 
     //add user
-    @GetMapping("/addUser/{id}")
-    private String addUserShowForm(@PathVariable Long id, Model model){
+    @GetMapping({"/addUser/{id}", "/addUser/{id}?oversize=true"})
+    private String addUserShowForm(@PathVariable Long id, Model model,@RequestParam(required = false) boolean oversize){
+        if(oversize){
+            model.addAttribute("oversize", true);
+        }
+
         GroupModel joiningUsers = groupService.findJoiningUsers(id);
         model.addAttribute("groupForUser", joiningUsers);
         return "admin/groups/adduser";
@@ -53,6 +57,12 @@ public class GroupModelController {
 
     @PostMapping("/addUser/{id}")
     private String addUserProceedForm(GroupModel groupModel){
+
+        int preUpdatedUsersNumber = groupService.findJoiningUsers(groupModel.getId()).getUsers().size();
+
+        if (groupModel.getSize() < preUpdatedUsersNumber + groupModel.getUsers().size()){
+            return "redirect:/admin/groups/addUser/{id}?oversize=true";
+        }
 
         groupModel.getUsers().stream()
                 .forEach(user -> {
@@ -93,14 +103,21 @@ public class GroupModelController {
     }
 
     // update
-    @GetMapping("/update/{id}")
-    private String showUpdateForm(@PathVariable Long id, Model model){
+    @GetMapping({"/update/{id}","/update/{id}?oversize=true"})
+    private String showUpdateForm(@PathVariable Long id, Model model, @RequestParam(required = false) boolean oversize){
+        if(oversize){
+            model.addAttribute("oversize", true);
+        }
         model.addAttribute("groupModel" , groupService.findJoiningUsers(id));
         return "/admin/groups/update";
     }
 
     @PostMapping("/update/{id}")
     private String proceedUpdateForm(GroupModel groupModel){
+        if (!groupService.verificationOfOversize(groupModel.getId(), groupModel.getUsers())){
+            return "redirect:/admin/groups/update/{id}?oversize=true";
+        }
+
         GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
         List<User> formerUsers = groupToUpdate.getUsers();
         formerUsers.stream()
