@@ -41,6 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/user/start")
                 .and().logout().logoutSuccessUrl("/")
                 .and().exceptionHandling().accessDeniedPage("/403");
+
+        http.cors().and().csrf().disable();//tylko lokalnie dodać proxy
     }
 
     @Bean

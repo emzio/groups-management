@@ -15,7 +15,7 @@
             </h4>
         </div>
     </div>
-
+    <hr class="my-3">
     <p><a href="http://localhost:8080" type="button" class="btn btn-success" >main</a></p>
     <p><sec:authorize access="isAnonymous()"><a href="/login" class="btn btn-success">Login</a></sec:authorize></p>
     <p><sec:authorize access="isAnonymous()"><a href="/registry" class="btn btn-success">Registry</a></sec:authorize></p>
