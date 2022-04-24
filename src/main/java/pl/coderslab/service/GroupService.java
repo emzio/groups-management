@@ -1,6 +1,7 @@
 package pl.coderslab.service;
 
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,6 @@ public interface GroupService {
     List<GroupModel> findAllJoiningUsers();
 
     List<GroupModel> findGroupsWithFreePlaces();
+
+    public boolean verificationOfOversize(Long groupId, List<User> users);
 }

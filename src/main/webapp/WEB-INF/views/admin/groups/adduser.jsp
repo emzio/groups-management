@@ -8,6 +8,9 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body, text-black-50">
+            <h3 class="text-danger"><c:if test="${oversize}">
+                To many users for group size: ${groupForUser.getSize()}
+            </c:if></h3>
             <form:form method="post" modelAttribute="groupForUser">
                 <div class="form-label"> User:</div>
                 <form:select path="users" items="${users}" itemLabel="name" itemValue="id" cssClass="form-select"/>
