@@ -5,23 +5,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
+import pl.coderslab.service.CalendarCellService;
+import pl.coderslab.service.DayOfWeekService;
 import pl.coderslab.service.GroupService;
 import pl.coderslab.service.UserService;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
 
     private final UserService userService;
     private final GroupService groupService;
+    private final CalendarCellService calendarCellService;
+    private final DayOfWeekService dayOfWeekService;
 
-    public UserController(UserService userService, GroupService groupService) {
+    public UserController(UserService userService, GroupService groupService, CalendarCellService calendarCellService, DayOfWeekService dayOfWeekService) {
         this.userService = userService;
         this.groupService = groupService;
+        this.calendarCellService = calendarCellService;
+        this.dayOfWeekService = dayOfWeekService;
     }
 
     @GetMapping("/user/start")
@@ -32,6 +41,20 @@ public class UserController {
             model.addAttribute("users", userService.findAll());
             return "/admin/adminstart";
         }
+        User user = userService.findByUserName(customUser.getUsername());
+        return userStartView(model, user);
+    }
+
+    private String userStartView(Model model, User user){
+        List<CalendarCell> cells = calendarCellService.calendarCardForUser(user.getId(), LocalDate.now().getMonth(), Year.of(LocalDate.now().getYear()));
+        Map<Integer, List<CalendarCell>> cellsMap =
+                cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
+        List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+
+        model.addAttribute("groupsForUser", user.getGroups());
+
+        model.addAttribute("daysOfWeek" ,dayOfWeekService.findAll());
+        model.addAttribute("weeksForUser", weeks);
         return "/user/userstart";
     }
 
@@ -94,6 +117,7 @@ public class UserController {
         userService.update(user);
         return "redirect:/admin/users";
     }
+
 
     @ModelAttribute("groups")
     Collection<GroupModel> findAllGroups(){

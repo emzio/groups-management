@@ -13,6 +13,8 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body, text-black-50">
+            <h2>Your Groups</h2>
+
             <table class="table">
                 <thead>
                 <tr>
@@ -28,7 +30,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${groups}" var="singleGroup">
+                <c:forEach items="${groupsForUser}" var="singleGroup">
                     <tr>
                         <td>
                                 ${singleGroup.getName()}
@@ -39,6 +41,39 @@
                         <td>
                                 ${singleGroup.getLocalTime()}
                         </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body, text-black-50">
+            <h2>Your Classes</h2>
+
+            <table class="table-bordered">
+                <thead>
+                <tr>
+                    <c:forEach items="${daysOfWeek}" var="day">
+                        <td>
+                                ${day}
+                        </td>
+                    </c:forEach>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${weeksForUser}" var="week">
+                    <tr>
+                        <c:forEach items="${week}" var="cell">
+                            <td>
+                                    ${cell.getDate()}
+                                    ${cell.getDay()}
+                                    ${cell.getDescription()}
+                            </td>
+                        </c:forEach>
                     </tr>
                 </c:forEach>
                 </tbody>
