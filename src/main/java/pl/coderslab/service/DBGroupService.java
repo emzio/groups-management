@@ -15,9 +15,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class DBGroupService implements GroupService{
     private final GroupModelRepository groupModelRepository;
+    private final UserService userService;
 
-    public DBGroupService(GroupModelRepository groupModelRepository) {
+    public DBGroupService(GroupModelRepository groupModelRepository, UserService userService) {
         this.groupModelRepository = groupModelRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -68,9 +70,31 @@ public class DBGroupService implements GroupService{
         return groupModelsWithFreePlaces;
     }
 
+// <<<<<<< feature/user_update
+    @Override
+    @Transactional
+    public void editGroupModel(GroupModel groupModel) {
+        GroupModel groupToUpdate = findJoiningUsers(groupModel.getId());
+        groupToUpdate.getUsers().forEach(user -> {
+            user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
+            userService.save(user);
+        });
+        groupToUpdate.getUsers().removeIf(u -> !groupModel.getUsers().stream().map(User::getId).collect(Collectors.toList()).contains(u.getId()));
+        save(groupToUpdate);
+        groupToUpdate.setUsers(groupModel.getUsers());
+        groupToUpdate.getUsers()
+                .forEach(user -> {
+                    if (!user.getGroups().stream().map(GroupModel::getId).collect(Collectors.toList()).contains(groupModel.getId())) {
+                        user.getGroups().add(groupModel);
+                        userService.save(user);
+                    }
+                });
+        save(groupToUpdate);
+// =======
 
     @Override
     public boolean verificationOfOversize(Long groupId, List<User> users){
         return findById(groupId).get().getSize() >= users.size();
+// >>>>>>> main
     }
 }

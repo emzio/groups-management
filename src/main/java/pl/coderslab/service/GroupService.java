@@ -24,5 +24,9 @@ public interface GroupService {
 
     List<GroupModel> findGroupsWithFreePlaces();
 
+// <<<<<<< feature/user_update
+    void editGroupModel(GroupModel groupModel);
+// =======
     public boolean verificationOfOversize(Long groupId, List<User> users);
+// >>>>>>> main
 }

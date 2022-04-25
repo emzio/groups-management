@@ -113,24 +113,32 @@ public class GroupModelController {
     }
 
     @PostMapping("/update/{id}")
-    private String proceedUpdateForm(GroupModel groupModel){
-        if (!groupService.verificationOfOversize(groupModel.getId(), groupModel.getUsers())){
+// <<<<<<< feature/user_update
+  
+    public String proceedUpdateForm(GroupModel groupModel){
+  if (!groupService.verificationOfOversize(groupModel.getId(), groupModel.getUsers())){
             return "redirect:/admin/groups/update/{id}?oversize=true";
-        }
+  }
+        groupService.editGroupModel(groupModel);
+// =======
+//     private String proceedUpdateForm(GroupModel groupModel){
+        
+        
 
-        GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
-        List<User> formerUsers = groupToUpdate.getUsers();
-        formerUsers.stream()
-                        .forEach(user -> {
-                            user.getGroups().remove(groupToUpdate);
-                            userService.save(user);
-                        });
-        groupModel.getUsers().stream()
-                        .forEach(user -> {
-                            user.getGroups().add(groupModel);
-                            userService.save(user);
-                        });
-        groupService.save(groupModel);
+//         GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
+//         List<User> formerUsers = groupToUpdate.getUsers();
+//         formerUsers.stream()
+//                         .forEach(user -> {
+//                             user.getGroups().remove(groupToUpdate);
+//                             userService.save(user);
+//                         });
+//         groupModel.getUsers().stream()
+//                         .forEach(user -> {
+//                             user.getGroups().add(groupModel);
+//                             userService.save(user);
+//                         });
+//         groupService.save(groupModel);
+// >>>>>>> main
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 
