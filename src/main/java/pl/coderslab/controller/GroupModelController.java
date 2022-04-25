@@ -44,8 +44,12 @@ public class GroupModelController {
     }
 
     //add user
-    @GetMapping("/addUser/{id}")
-    private String addUserShowForm(@PathVariable Long id, Model model){
+    @GetMapping({"/addUser/{id}", "/addUser/{id}?oversize=true"})
+    private String addUserShowForm(@PathVariable Long id, Model model,@RequestParam(required = false) boolean oversize){
+        if(oversize){
+            model.addAttribute("oversize", true);
+        }
+
         GroupModel joiningUsers = groupService.findJoiningUsers(id);
         model.addAttribute("groupForUser", joiningUsers);
         return "admin/groups/adduser";
@@ -53,6 +57,12 @@ public class GroupModelController {
 
     @PostMapping("/addUser/{id}")
     private String addUserProceedForm(GroupModel groupModel){
+
+        int preUpdatedUsersNumber = groupService.findJoiningUsers(groupModel.getId()).getUsers().size();
+
+        if (groupModel.getSize() < preUpdatedUsersNumber + groupModel.getUsers().size()){
+            return "redirect:/admin/groups/addUser/{id}?oversize=true";
+        }
 
         groupModel.getUsers().stream()
                 .forEach(user -> {
@@ -93,15 +103,42 @@ public class GroupModelController {
     }
 
     // update
-    @GetMapping("/update/{id}")
-    private String showUpdateForm(@PathVariable Long id, Model model){
+    @GetMapping({"/update/{id}","/update/{id}?oversize=true"})
+    private String showUpdateForm(@PathVariable Long id, Model model, @RequestParam(required = false) boolean oversize){
+        if(oversize){
+            model.addAttribute("oversize", true);
+        }
         model.addAttribute("groupModel" , groupService.findJoiningUsers(id));
         return "/admin/groups/update";
     }
 
     @PostMapping("/update/{id}")
+// <<<<<<< feature/user_update
+  
     public String proceedUpdateForm(GroupModel groupModel){
+  if (!groupService.verificationOfOversize(groupModel.getId(), groupModel.getUsers())){
+            return "redirect:/admin/groups/update/{id}?oversize=true";
+  }
         groupService.editGroupModel(groupModel);
+// =======
+//     private String proceedUpdateForm(GroupModel groupModel){
+        
+        
+
+//         GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
+//         List<User> formerUsers = groupToUpdate.getUsers();
+//         formerUsers.stream()
+//                         .forEach(user -> {
+//                             user.getGroups().remove(groupToUpdate);
+//                             userService.save(user);
+//                         });
+//         groupModel.getUsers().stream()
+//                         .forEach(user -> {
+//                             user.getGroups().add(groupModel);
+//                             userService.save(user);
+//                         });
+//         groupService.save(groupModel);
+// >>>>>>> main
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 
@@ -112,11 +149,11 @@ public class GroupModelController {
         return "admin/groups/selectMonth";
     }
 
-    @GetMapping("/monthtest")
-    private String proceedSelectMonthForm(Model model, @RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
+//    @GetMapping("/monthtest")
+    @PostMapping("/monthtest")
+    public String proceedSelectMonthForm(@RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
         String date = String.valueOf(LocalDate.of(year, month, 1));
         return "redirect:/admin/groups/"+ groupId+"?date="+date.toString();
-//        return "redirect:/admin/groups/"+ groupId+"/"+date.toString();
     }
 
 //    GroupDetails
@@ -136,7 +173,7 @@ public class GroupModelController {
                 year = Year.of(localDate.getYear());
             }
 
-            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
+//            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
             List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
             Map<Integer, List<CalendarCell>> cellsMap =
                     cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));

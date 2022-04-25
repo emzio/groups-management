@@ -1,6 +1,7 @@
 package pl.coderslab.service;
 
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,5 +24,9 @@ public interface GroupService {
 
     List<GroupModel> findGroupsWithFreePlaces();
 
+// <<<<<<< feature/user_update
     void editGroupModel(GroupModel groupModel);
+// =======
+    public boolean verificationOfOversize(Long groupId, List<User> users);
+// >>>>>>> main
 }

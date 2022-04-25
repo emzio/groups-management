@@ -70,6 +70,7 @@ public class DBGroupService implements GroupService{
         return groupModelsWithFreePlaces;
     }
 
+// <<<<<<< feature/user_update
     @Override
     @Transactional
     public void editGroupModel(GroupModel groupModel) {
@@ -89,5 +90,11 @@ public class DBGroupService implements GroupService{
                     }
                 });
         save(groupToUpdate);
+// =======
+
+    @Override
+    public boolean verificationOfOversize(Long groupId, List<User> users){
+        return findById(groupId).get().getSize() >= users.size();
+// >>>>>>> main
     }
 }
