@@ -49,8 +49,18 @@ public class GroupModelController {
         if(oversize){
             model.addAttribute("oversize", true);
         }
-
         GroupModel joiningUsers = groupService.findJoiningUsers(id);
+
+        List<User> usersOutsideGroup = userService.findAll();
+        usersOutsideGroup.removeIf(user -> joiningUsers.getUsers().stream()
+                .map(User::getId)
+                .collect(Collectors.toList())
+                .contains(user.getId())
+        );
+        usersOutsideGroup.removeAll(joiningUsers.getUsers());
+
+        model.addAttribute("usersOutsideGroup", usersOutsideGroup);
+
         model.addAttribute("groupForUser", joiningUsers);
         return "admin/groups/adduser";
     }
@@ -122,8 +132,6 @@ public class GroupModelController {
         groupService.editGroupModel(groupModel);
 // =======
 //     private String proceedUpdateForm(GroupModel groupModel){
-        
-        
 
 //         GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
 //         List<User> formerUsers = groupToUpdate.getUsers();

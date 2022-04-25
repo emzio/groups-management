@@ -19,6 +19,7 @@ public class GroupModel {
     private Long id;
 
     @ManyToMany(mappedBy = "groups", cascade = CascadeType.MERGE)
+//    @ManyToMany(mappedBy = "groups")
     private List<User> users = new ArrayList<>();
 
     private String name;

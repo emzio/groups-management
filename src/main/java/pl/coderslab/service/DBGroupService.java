@@ -79,6 +79,7 @@ public class DBGroupService implements GroupService{
             user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
             userService.save(user);
         });
+        // groupModel.getUserListId() ???
         groupToUpdate.getUsers().removeIf(u -> !groupModel.getUsers().stream().map(User::getId).collect(Collectors.toList()).contains(u.getId()));
         save(groupToUpdate);
         groupToUpdate.setUsers(groupModel.getUsers());
@@ -90,6 +91,7 @@ public class DBGroupService implements GroupService{
                     }
                 });
         save(groupToUpdate);
+    }
 // =======
 
     @Override

@@ -13,7 +13,7 @@
             </c:if></h3>
             <form:form method="post" modelAttribute="groupForUser">
                 <div class="form-label"> User:</div>
-                <form:select path="users" items="${users}" itemLabel="name" itemValue="id" cssClass="form-select"/>
+                <form:select path="users" items="${usersOutsideGroup}" itemLabel="name" itemValue="id" cssClass="form-select"/>
                 <form:hidden path="name"/>
                 <form:hidden path="dayOfWeek"/>
                 <form:hidden path="localTime"/>
