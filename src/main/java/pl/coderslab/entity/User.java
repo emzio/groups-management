@@ -1,5 +1,7 @@
 package pl.coderslab.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -23,8 +25,9 @@ public class User {
 
 
 
-    @OneToMany
-//    @OneToMany(fetch = FetchType.EAGER)
+//    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "user_id")
     private List<Payment> payments = new ArrayList<>();
 
