@@ -9,7 +9,7 @@ import java.time.Month;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+//    @Column(name = "id", nullable = false)
     private Long id;
 
     private LocalDate dateOfPayment;
@@ -47,4 +47,14 @@ public class Payment {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
+//    @Override
+//    public String toString() {
+//        return "Payment{" +
+//                "id=" + id +
+//                ", dateOfPayment=" + dateOfPayment +
+//                ", paymentCode='" + paymentCode + '\'' +
+//                ", amount=" + amount +
+//                '}';
+//    }
 }

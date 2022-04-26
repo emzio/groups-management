@@ -27,6 +27,8 @@ public interface UserService {
 
     public User findByIdWithGroups(Long id);
 
+    User findByIdWithGroupsAndPayments(Long id);
+
     public List<User> findAll();
 
     public void save(User user);

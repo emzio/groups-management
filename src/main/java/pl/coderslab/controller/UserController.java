@@ -7,12 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.CalendarCellService;
 import pl.coderslab.service.DayOfWeekService;
 import pl.coderslab.service.GroupService;
 import pl.coderslab.service.UserService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
@@ -130,7 +132,22 @@ public class UserController {
     }
 
 
-    // PONIŻEJ AKCJE TESTOWE - BEZ FORMULARZY !!!
+    // PONIŻEJ AKCJE TESTOWE !!!
+
+    @GetMapping("/addPayment/{userId}")
+    @ResponseBody
+    private String addPaymentToUser(@PathVariable Long userId){
+        Payment payment = new Payment();
+        payment.setAmount(BigDecimal.valueOf(100.50));
+        payment.setPaymentCode("ad");
+
+//        userService.addPaymentToUser(userService.findByIdWithGroupsAndPayments(userId), payment);
+        User byIdWithGroupsAndPayments = userService.findByIdWithGroupsAndPayments(userId);
+
+
+        return "payments: " + byIdWithGroupsAndPayments.getPayments() + userService.findByIdWithGroups(userId);
+    }
+
     @GetMapping("/create-admin")
     @ResponseBody
     private String createAdmin(){
