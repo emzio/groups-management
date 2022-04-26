@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.Role;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.RoleRepository;
@@ -88,6 +89,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).get();
         Hibernate.initialize(user.getGroups());
         return user;
+    }
+
+    // add Payment
+
+
+    @Override
+    public void addPaymentToUser(User user, Payment payment) {
+
     }
 
     @Override

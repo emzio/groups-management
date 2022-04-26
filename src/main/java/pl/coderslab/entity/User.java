@@ -18,8 +18,12 @@ public class User {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-//    @ManyToMany
     private List<GroupModel> groups = new ArrayList<>();
+
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Payment> payments = new ArrayList<>();
 
     private String name;
 
@@ -110,5 +114,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
     }
 }

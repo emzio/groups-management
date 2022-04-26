@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
 
 import java.util.List;
@@ -30,4 +31,5 @@ public interface UserService {
 
     public void save(User user);
 
+    void addPaymentToUser(User user, Payment payment);
 }
