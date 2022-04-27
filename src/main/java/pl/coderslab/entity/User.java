@@ -25,7 +25,7 @@ public class User {
 
 
 
-//    @OneToMany
+//   @OneToMany
     @OneToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "user_id")
@@ -39,7 +39,6 @@ public class User {
 
     private int enabled;
     @ManyToMany(fetch = FetchType.EAGER)
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;

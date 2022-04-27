@@ -106,6 +106,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findWithPayments(Long id){
+        return userRepository.findWithPayments(id);
+    }
+
+    @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }

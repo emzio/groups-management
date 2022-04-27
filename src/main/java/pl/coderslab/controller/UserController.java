@@ -120,6 +120,21 @@ public class UserController {
         return "redirect:/admin/users";
     }
 
+//    @GetMapping("/admin/addPayment/{userId}")
+//    private String showAddPaymentToUserForm(Model model, @PathVariable Long userId){
+//        Payment payment = new Payment();
+//        model.addAttribute("userId", userId);
+//        model.addAttribute("payment", payment);
+//        return "admin/payments/addPayment";
+//    }
+//
+//    @PostMapping("/admin/addPayment/{userId}")
+//    private String showAddPaymentToUserForm(Payment payment, @RequestParam Long userId){
+//        User user = userService.findByIdWithGroups(userId);
+////        User user = userService.findWithPayments(userId);
+//        userService.addPaymentToUser(user, payment);
+//        return "redirect:/admin/users";
+//    }
 
     @ModelAttribute("groups")
     Collection<GroupModel> findAllGroups(){
@@ -134,19 +149,7 @@ public class UserController {
 
     // PONIŻEJ AKCJE TESTOWE !!!
 
-    @GetMapping("/addPayment/{userId}")
-    @ResponseBody
-    private String addPaymentToUser(@PathVariable Long userId){
-        Payment payment = new Payment();
-        payment.setAmount(BigDecimal.valueOf(100.50));
-        payment.setPaymentCode("ad");
 
-//        userService.addPaymentToUser(userService.findByIdWithGroupsAndPayments(userId), payment);
-        User byIdWithGroupsAndPayments = userService.findByIdWithGroupsAndPayments(userId);
-
-
-        return "payments: " + byIdWithGroupsAndPayments.getPayments() + userService.findByIdWithGroups(userId);
-    }
 
     @GetMapping("/create-admin")
     @ResponseBody

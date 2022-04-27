@@ -33,5 +33,6 @@ public interface UserService {
 
     public void save(User user);
 
+    User findWithPayments(Long id);
     void addPaymentToUser(User user, Payment payment);
 }

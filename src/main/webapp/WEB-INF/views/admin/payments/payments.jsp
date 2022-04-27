@@ -8,32 +8,25 @@
 <link rel="stylesheet" href="../../../../resources/bootstrap.css" />
 
 <div class="col-12">
-    <a href="/user/start" class="btn btn-success">Groups menu</a>
-    <a href="/registry" class="btn btn-secondary"> Create new user</a>
-    <a href="/admin/users/addadmin" class="btn btn-danger"> Create new admin </a>
+    <a href="/admin/users" class="btn btn-success">Users menu</a>
 </div>
 
 <div class="col-12">
     <div class="card">
         <div class="card-body, text-black-50">
-
+            <hr class="my-3">
+            <a href="/admin/addPayment/${userId}" class="btn btn-danger"> Add payment </a>
+            <hr class="my-3">
             <table class="table">
                 <thead>
                 <tr>
                     <td>
-                        Name
+                        Date of Payment
+                    <td>
+                        Payment Code
                     </td>
                     <td>
-                        Lastname
-                    </td>
-                    <td>
-                        Email
-                    </td>
-                    <td>
-                        Groups
-                    </td>
-                    <td>
-                        Payments
+                        Amount
                     </td>
                     <td>
                         Actions
@@ -41,26 +34,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${users}" var="singleUser">
+                <c:forEach items="${paymentsForUser}" var="singlePayment">
                     <tr>
                         <td>
-                                ${singleUser.getName()}
+                                ${singlePayment.getDateOfPayment()}
                         </td>
                         <td>
-                                ${singleUser.getLastName()}
+                                ${singlePayment.getPaymentCode()}
                         </td>
                         <td>
-                                ${singleUser.getEmail()}
+                                ${singlePayment.getAmount()}
                         </td>
                         <td>
-                                ${singleUser.getGroups()}
-                        </td>
-                        <td>
-                            <a href="/admin/payments/${singleUser.getId()}" type="button" class="btn btn-success"> Payments </a>
-                        </td>
-                        <td>
-                            <a href="/admin/users/update/${singleUser.getId()}"> Update </a>
-                            <a href="/admin/users/delete/${singleUser.getId()}"> Delete </a>
+                            <a href="/admin/deletePayment/${userId}"> Delete payment </a>
                         </td>
 
                     </tr>

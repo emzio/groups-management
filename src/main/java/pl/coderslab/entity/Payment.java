@@ -1,5 +1,7 @@
 package pl.coderslab.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ public class Payment {
     private Long id;
 
     private LocalDate dateOfPayment;
+
     private String paymentCode;
     private BigDecimal amount;
 
@@ -48,13 +51,13 @@ public class Payment {
         this.amount = amount;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Payment{" +
-//                "id=" + id +
-//                ", dateOfPayment=" + dateOfPayment +
-//                ", paymentCode='" + paymentCode + '\'' +
-//                ", amount=" + amount +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", dateOfPayment=" + dateOfPayment +
+                ", paymentCode='" + paymentCode + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }
