@@ -1,18 +1,16 @@
 package pl.coderslab.service;
 
 import org.hibernate.Hibernate;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.Role;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.RoleRepository;
 import pl.coderslab.repository.UserRepository;
 
-import java.awt.print.Book;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -25,11 +23,13 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    private final PaymentService paymentService;
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-                           BCryptPasswordEncoder passwordEncoder) {
+                           BCryptPasswordEncoder passwordEncoder, PaymentService paymentService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.paymentService = paymentService;
     }
 
     @Override
@@ -88,6 +88,26 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).get();
         Hibernate.initialize(user.getGroups());
         return user;
+    }
+    @Override
+    public User findByIdWithGroupsAndPayments(Long id){
+        User user = userRepository.findById(id).get();
+        Hibernate.initialize(user.getPayments());
+        return user;
+    }
+
+    // add Payment
+    @Override
+    public void addPaymentToUser(User user, Payment payment) {
+        payment.setDateOfPayment(LocalDate.now());
+        user.getPayments().add(payment);
+        paymentService.save(payment);
+        userRepository.save(user);
+    }
+
+    @Override
+    public User findWithPayments(Long id){
+        return userRepository.findWithPayments(id);
     }
 
     @Override

@@ -79,7 +79,7 @@ public class GroupModelController {
                     user.getGroups().add(groupModel);
                     userService.save(user);
                 });
-        groupService.save(groupModel);
+//        groupService.save(groupModel);
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 

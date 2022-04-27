@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
 
 import java.util.List;
@@ -26,8 +27,12 @@ public interface UserService {
 
     public User findByIdWithGroups(Long id);
 
+    User findByIdWithGroupsAndPayments(Long id);
+
     public List<User> findAll();
 
     public void save(User user);
 
+    User findWithPayments(Long id);
+    void addPaymentToUser(User user, Payment payment);
 }

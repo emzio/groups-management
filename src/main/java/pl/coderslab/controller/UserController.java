@@ -7,12 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
+import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.CalendarCellService;
 import pl.coderslab.service.DayOfWeekService;
 import pl.coderslab.service.GroupService;
 import pl.coderslab.service.UserService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
@@ -118,6 +120,21 @@ public class UserController {
         return "redirect:/admin/users";
     }
 
+//    @GetMapping("/admin/addPayment/{userId}")
+//    private String showAddPaymentToUserForm(Model model, @PathVariable Long userId){
+//        Payment payment = new Payment();
+//        model.addAttribute("userId", userId);
+//        model.addAttribute("payment", payment);
+//        return "admin/payments/addPayment";
+//    }
+//
+//    @PostMapping("/admin/addPayment/{userId}")
+//    private String showAddPaymentToUserForm(Payment payment, @RequestParam Long userId){
+//        User user = userService.findByIdWithGroups(userId);
+////        User user = userService.findWithPayments(userId);
+//        userService.addPaymentToUser(user, payment);
+//        return "redirect:/admin/users";
+//    }
 
     @ModelAttribute("groups")
     Collection<GroupModel> findAllGroups(){
@@ -130,7 +147,10 @@ public class UserController {
     }
 
 
-    // PONIŻEJ AKCJE TESTOWE - BEZ FORMULARZY !!!
+    // PONIŻEJ AKCJE TESTOWE !!!
+
+
+
     @GetMapping("/create-admin")
     @ResponseBody
     private String createAdmin(){
