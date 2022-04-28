@@ -16,4 +16,5 @@ public interface CanceledClassesService {
     public void deleteById(Long id);
 
     public void update(CanceledClasses canceledClasses);
+
 }

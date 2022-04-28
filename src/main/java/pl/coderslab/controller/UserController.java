@@ -7,12 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
-import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
-import pl.coderslab.service.CalendarCellService;
-import pl.coderslab.service.DayOfWeekService;
-import pl.coderslab.service.GroupService;
-import pl.coderslab.service.UserService;
+import pl.coderslab.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,11 +24,13 @@ public class UserController {
     private final CalendarCellService calendarCellService;
     private final DayOfWeekService dayOfWeekService;
 
-    public UserController(UserService userService, GroupService groupService, CalendarCellService calendarCellService, DayOfWeekService dayOfWeekService) {
+    private final PaymentService paymentService;
+    public UserController(UserService userService, GroupService groupService, CalendarCellService calendarCellService, DayOfWeekService dayOfWeekService, PaymentService paymentService) {
         this.userService = userService;
         this.groupService = groupService;
         this.calendarCellService = calendarCellService;
         this.dayOfWeekService = dayOfWeekService;
+        this.paymentService = paymentService;
     }
 
     @GetMapping("/user/start")
@@ -57,6 +55,11 @@ public class UserController {
 
         model.addAttribute("daysOfWeek" ,dayOfWeekService.findAll());
         model.addAttribute("weeksForUser", weeks);
+
+        // Informacje o płatnościach:
+        Map<String, BigDecimal> paymentsInfo = paymentService.paymentAndClasses(cells);
+        model.addAttribute("numberOfClasses",paymentsInfo.get("numberOfClasses"));
+        model.addAttribute("paymentAmount", paymentsInfo.get("paymentAmount"));
         return "/user/userstart";
     }
 

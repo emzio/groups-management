@@ -8,6 +8,7 @@ import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.*;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,12 +22,14 @@ public class GroupModelController {
     private final DayOfWeekService dayOfWeekService;
     private final CalendarCellService calendarCellService;
 
-    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService, CalendarCellService calendarCellService) {
+    private final PaymentService paymentService;
+    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService, CalendarCellService calendarCellService, PaymentService paymentService) {
         this.groupService = groupService;
         this.canceledClassesService = canceledClassesService;
         this.userService = userService;
         this.dayOfWeekService = dayOfWeekService;
         this.calendarCellService = calendarCellService;
+        this.paymentService = paymentService;
     }
 
     //add
@@ -187,6 +190,11 @@ public class GroupModelController {
                     cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
             List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
             model.addAttribute("weeks", weeks);
+
+            // Informacje o płatnościach:
+            Map<String, BigDecimal> paymentsInfo = paymentService.paymentAndClasses(cells);
+            model.addAttribute("numberOfClasses",paymentsInfo.get("numberOfClasses"));
+            model.addAttribute("paymentAmount", paymentsInfo.get("paymentAmount"));
 
             return "admin/groups/details";
         }

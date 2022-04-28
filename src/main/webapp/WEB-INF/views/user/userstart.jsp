@@ -53,7 +53,8 @@
     <div class="card">
         <div class="card-body, text-black-50">
             <h2>Your Classes</h2>
-
+            <h2>NumberOfClasses: ${numberOfClasses}</h2>
+            <h2>PaymentAmount: ${paymentAmount}</h2>
             <table class="table-bordered">
                 <thead>
                 <tr>
@@ -69,8 +70,8 @@
                     <tr>
                         <c:forEach items="${week}" var="cell">
                             <td>
-                                    ${cell.getDate()}
-                                    ${cell.getDay()}
+                                    ${cell.getDate().getDayOfMonth()}
+                                    ${cell.getAddToFee()}
                                     ${cell.getDescription()}
                             </td>
                         </c:forEach>

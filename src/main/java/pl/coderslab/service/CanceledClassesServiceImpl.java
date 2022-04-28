@@ -40,6 +40,4 @@ public class CanceledClassesServiceImpl implements CanceledClassesService{
     public void update(CanceledClasses canceledClasses) {
         canceledClassesRepository.save(canceledClasses);
     }
-
-
 }
