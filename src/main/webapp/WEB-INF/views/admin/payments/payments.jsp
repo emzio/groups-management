@@ -59,6 +59,45 @@
     </div>
 </div>
 
+<div class="col-12">
+    <div class="card">
+        <div class="card-body, text-black-50">
+            <h2>Your Classes</h2>
+            <h2>NumberOfClasses: ${numberOfClasses}</h2>
+            <h2>PaymentAmount: ${paymentAmount}</h2>
+            <hr class="my-3">
+            <a href="/admin/user/month/${userId}" class="btn btn-primary"> Another month </a>
+            <hr class="my-3">
+            <p>Month: ${month}</p>
+            <p>Year: ${year}</p>
+            <table class="table-bordered">
+                <thead>
+                <tr>
+                    <c:forEach items="${daysOfWeek}" var="day">
+                        <td>
+                                ${day}
+                        </td>
+                    </c:forEach>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${weeksForUser}" var="week">
+                    <tr>
+                        <c:forEach items="${week}" var="cell">
+                            <td>
+                                    ${cell.getDate().getDayOfMonth()}
+                                    ${cell.getAddToFee()}
+                                    ${cell.getDescription()}
+                            </td>
+                        </c:forEach>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <script src="../../../../resources/bootstrap.js"></script>
 <script src="https://unpkg.com/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
 <%@ include file="../../footer.jsp" %>
