@@ -37,6 +37,7 @@ public class PaymentsController {
         }
         model.addAttribute("paymentsForUser", payments);
         model.addAttribute("userId", userId);
+
         return "/admin/payments/payments";
     }
 

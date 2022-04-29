@@ -55,6 +55,11 @@
             <h2>Your Classes</h2>
             <h2>NumberOfClasses: ${numberOfClasses}</h2>
             <h2>PaymentAmount: ${paymentAmount}</h2>
+            <hr class="my-3">
+            <a href="/user/month/${userId}" class="btn btn-primary"> Another month </a>
+            <hr class="my-3">
+            <p>Month: ${month}</p>
+            <p>Year: ${year}</p>
             <table class="table-bordered">
                 <thead>
                 <tr>

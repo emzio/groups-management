@@ -154,17 +154,17 @@ public class GroupModelController {
     }
 
     // select month for CalendarCard
-    @GetMapping("/month/{groupId}")
-    private String showSelectMonthForm(Model model, @PathVariable Long groupId){
-        model.addAttribute("groupId", groupId);
+    @GetMapping("/month/{id}")
+    private String showSelectMonthForm(Model model, @PathVariable Long id){
+        model.addAttribute("id", id);
         return "admin/groups/selectMonth";
     }
 
-//    @GetMapping("/monthtest")
-    @PostMapping("/monthtest")
-    public String proceedSelectMonthForm(@RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
+//    @PostMapping("/monthtest")
+    @PostMapping("/month/{groupId}")
+    public String proceedSelectMonthForm(@RequestParam String id, @RequestParam Integer year, @RequestParam Integer month){
         String date = String.valueOf(LocalDate.of(year, month, 1));
-        return "redirect:/admin/groups/"+ groupId+"?date="+date.toString();
+        return "redirect:/admin/groups/"+ id+"?date="+date.toString();
     }
 
 //    GroupDetails
