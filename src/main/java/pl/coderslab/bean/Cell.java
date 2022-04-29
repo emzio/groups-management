@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public interface Cell {
     LocalDate getDate();
     void setDate(LocalDate localDate);
-    String getDay();
-    void setDay(String day);
+    Boolean getAddToFee();
+    void setAddToFee(Boolean addToFee);
     String getDescription();
     void setDescription(String description);
 }

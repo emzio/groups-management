@@ -71,10 +71,11 @@ public class CalendarCellService {
             cells.stream()
                     .forEach(calendarCell -> {
                         if (classesDates.contains(calendarCell.getDate())) {
-                            calendarCell.setDay(groupModel.getDayOfWeek().toString());
-                            calendarCell.setDescription(groupModel.getName() + " " + groupModel.getLocalTime().toString());
+                            calendarCell.setAddToFee(true);
+                            calendarCell.setDescription(groupModel.getName() + " " + groupModel.getDayOfWeek().toString());
                         }
                         if(canceledClassesDates.contains(calendarCell.getDate())){
+                            calendarCell.setAddToFee(false);
                             calendarCell.setDescription("Free Day!");
                         }
                     });
@@ -103,12 +104,14 @@ public class CalendarCellService {
                                         .orElse(-1);
 
                                 calendarCell.setDescription(calendarCell.getDescription() + cellsForGroup.get(index).getDescription()+calendarCell.getDate());
+                                calendarCell.setAddToFee(cellsForGroup.get(index).getAddToFee());
                             }
                         });
             }
         }
         return cells;
     }
+
 
             // PONIŻEJ TESTOWE DO USUNIĘCIA?
 

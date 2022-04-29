@@ -46,7 +46,7 @@
                                 ${singlePayment.getAmount()}
                         </td>
                         <td>
-                            <a href="/admin/deletePayment/${userId}"> Delete payment </a>
+                            <a href="/admin/deletePayment/${userId}/${singlePayment.getId()}"> Delete payment </a>
                         </td>
 
                     </tr>

@@ -8,6 +8,7 @@ import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.*;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,12 +22,14 @@ public class GroupModelController {
     private final DayOfWeekService dayOfWeekService;
     private final CalendarCellService calendarCellService;
 
-    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService, CalendarCellService calendarCellService) {
+    private final PaymentService paymentService;
+    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService, CalendarCellService calendarCellService, PaymentService paymentService) {
         this.groupService = groupService;
         this.canceledClassesService = canceledClassesService;
         this.userService = userService;
         this.dayOfWeekService = dayOfWeekService;
         this.calendarCellService = calendarCellService;
+        this.paymentService = paymentService;
     }
 
     //add
@@ -151,17 +154,17 @@ public class GroupModelController {
     }
 
     // select month for CalendarCard
-    @GetMapping("/month/{groupId}")
-    private String showSelectMonthForm(Model model, @PathVariable Long groupId){
-        model.addAttribute("groupId", groupId);
+    @GetMapping("/month/{id}")
+    private String showSelectMonthForm(Model model, @PathVariable Long id){
+        model.addAttribute("id", id);
         return "admin/groups/selectMonth";
     }
 
-//    @GetMapping("/monthtest")
-    @PostMapping("/monthtest")
-    public String proceedSelectMonthForm(@RequestParam String groupId, @RequestParam Integer year, @RequestParam Integer month){
+//    @PostMapping("/monthtest")
+    @PostMapping("/month/{groupId}")
+    public String proceedSelectMonthForm(@RequestParam String id, @RequestParam Integer year, @RequestParam Integer month){
         String date = String.valueOf(LocalDate.of(year, month, 1));
-        return "redirect:/admin/groups/"+ groupId+"?date="+date.toString();
+        return "redirect:/admin/groups/"+ id+"?date="+date.toString();
     }
 
 //    GroupDetails
@@ -187,6 +190,11 @@ public class GroupModelController {
                     cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
             List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
             model.addAttribute("weeks", weeks);
+
+            // Informacje o płatnościach:
+            Map<String, BigDecimal> paymentsInfo = paymentService.paymentAndClasses(cells);
+            model.addAttribute("numberOfClasses",paymentsInfo.get("numberOfClasses"));
+            model.addAttribute("paymentAmount", paymentsInfo.get("paymentAmount"));
 
             return "admin/groups/details";
         }

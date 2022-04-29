@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class CalendarCell implements Cell{
     private LocalDate date;
-    private String day;
+    private Boolean addToFee;
     private String description;
 
     public CalendarCell() {
@@ -18,27 +18,28 @@ public class CalendarCell implements Cell{
     public String toString() {
         return "CalendarCell{" +
                 "date=" + date +
-                ", day='" + day + '\'' +
+                ", day='" + addToFee + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }
 
+    @Override
     public LocalDate getDate() {
         return date;
     }
 
+    @Override
     public void setDate(LocalDate localDate) {
         this.date = localDate;
     }
 
     @Override
-    public String getDay() {
-        return day;
+    public Boolean getAddToFee() {
+        return addToFee;
     }
 
-    @Override
-    public void setDay(String day) {
-        this.day = day;
+    public void setAddToFee(Boolean addToFee) {
+        this.addToFee = addToFee;
     }
 
     @Override

@@ -106,6 +106,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deletePaymentForUser(Long userId, Long paymentId){
+        User user = findByIdWithGroupsAndPayments(userId);
+        Payment payment = paymentService.findById(paymentId).get();
+        user.getPayments().remove(payment);
+        userRepository.save(user);
+        paymentService.delete(payment);
+    }
+
+    @Override
     public User findWithPayments(Long id){
         return userRepository.findWithPayments(id);
     }
@@ -120,5 +129,6 @@ public class UserServiceImpl implements UserService {
     public void save(User user){
         userRepository.save(user);
     }
+
 
 }

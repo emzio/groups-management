@@ -8,13 +8,14 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body, text-black-50">
-            <form method="post" action="/admin/groups/monthtest" >
+<%--            <form method="post" action="/admin/groups/monthtest" >--%>
+                <form method="post">
                 <div class="form-label">Month:</div>
                 <input type="number"  name="month">
                 <div class="form-label">Year:</div>
                 <input type="number" name="year">
 
-                <input type="hidden" name="groupId" value="${groupId}">
+                <input type="hidden" name="id" value="${id}">
 
                 <input type="submit" value="Select" class="btn btn-primary">
             </form>
