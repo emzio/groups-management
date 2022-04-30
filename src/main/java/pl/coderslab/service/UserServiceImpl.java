@@ -64,7 +64,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setEnabled(false);
+            user.getGroups().removeAll(user.getGroups());
+
+            userRepository.save(user);
+        }
+//        userRepository.deleteById(id);
     }
 
     @Override
