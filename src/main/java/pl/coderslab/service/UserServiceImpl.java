@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(1);
+        user.setEnabled(true);
         Role userRole = roleRepository.findByName("ROLE_USER");
 //        Role userRole = roleRepository.findByName("ROLE_ADMIN");
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveAdmin(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(1);
+        user.setEnabled(true);
         Role userRole = roleRepository.findByName("ROLE_USER");
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         user.setRoles(new HashSet<>(Arrays.asList(userRole, adminRole)));
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) {
-        user.setEnabled(1);
+        user.setEnabled(true);
         String rawPassword = user.getPassword();
         String formerPassword = userRepository.findById(user.getId()).get().getPassword();
 
