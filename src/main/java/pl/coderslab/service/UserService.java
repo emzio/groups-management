@@ -38,4 +38,6 @@ public interface UserService {
     void addPaymentToUser(User user, Payment payment);
 
     void deletePaymentForUser(Long userId, Long paymentId);
+
+    List<User> findAllActive();
 }

@@ -37,6 +37,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    //find all
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> findAllActive(){
+        return userRepository.findByEnabledIsTrue();
+    }
+
+//    add:
     @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -62,6 +74,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
+    // delete
+
     @Override
     public void deleteById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
@@ -75,6 +89,7 @@ public class UserServiceImpl implements UserService {
 //        userRepository.deleteById(id);
     }
 
+    //update:
     @Override
     public void update(User user) {
         user.setEnabled(true);
@@ -90,6 +105,8 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
     }
+
+
 
     @Override
     public User findByIdWithGroups(Long id) {
@@ -125,11 +142,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findWithPayments(Long id){
         return userRepository.findWithPayments(id);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
     }
 
     @Override
