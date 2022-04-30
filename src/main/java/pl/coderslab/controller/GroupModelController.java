@@ -54,7 +54,7 @@ public class GroupModelController {
         }
         GroupModel joiningUsers = groupService.findJoiningUsers(id);
 
-        List<User> usersOutsideGroup = userService.findAll();
+        List<User> usersOutsideGroup = userService.findAllActive();
         usersOutsideGroup.removeIf(user -> joiningUsers.getUsers().stream()
                 .map(User::getId)
                 .collect(Collectors.toList())
@@ -215,7 +215,7 @@ public class GroupModelController {
 
     @ModelAttribute("users")
     Collection<User> findAllUsers(){
-        return userService.findAll();
+        return userService.findAllActive();
     }
 
 

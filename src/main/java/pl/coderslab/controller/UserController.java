@@ -41,7 +41,7 @@ public class UserController {
 
         if (customUser != null && customUser.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
-            model.addAttribute("users", userService.findAll());
+//            model.addAttribute("users", userService.findAllActive());
             return "/admin/adminstart";
         }
 
@@ -83,7 +83,7 @@ public class UserController {
     // findAll
     @GetMapping("/admin/users")
     private String findAllUsers(Model model){
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.findAllActive());
         return "/admin/users/users";
     }
     // add admin

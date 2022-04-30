@@ -37,10 +37,22 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    //find all
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> findAllActive(){
+        return userRepository.findByEnabledIsTrue();
+    }
+
+//    add:
     @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(1);
+        user.setEnabled(true);
         Role userRole = roleRepository.findByName("ROLE_USER");
 //        Role userRole = roleRepository.findByName("ROLE_ADMIN");
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
@@ -50,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveAdmin(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(1);
+        user.setEnabled(true);
         Role userRole = roleRepository.findByName("ROLE_USER");
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         user.setRoles(new HashSet<>(Arrays.asList(userRole, adminRole)));
@@ -62,14 +74,25 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-    @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
+    // delete
 
     @Override
+    public void deleteById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setEnabled(false);
+            user.getGroups().removeAll(user.getGroups());
+
+            userRepository.save(user);
+        }
+//        userRepository.deleteById(id);
+    }
+
+    //update:
+    @Override
     public void update(User user) {
-        user.setEnabled(1);
+        user.setEnabled(true);
         String rawPassword = user.getPassword();
         String formerPassword = userRepository.findById(user.getId()).get().getPassword();
 
@@ -82,6 +105,8 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
     }
+
+
 
     @Override
     public User findByIdWithGroups(Long id) {
@@ -117,11 +142,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findWithPayments(Long id){
         return userRepository.findWithPayments(id);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
     }
 
     @Override

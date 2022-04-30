@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.coderslab.entity.User;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
@@ -12,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN FETCH u.payments where u.id = ?1")
 //    @Query("SELECT u FROM User u JOIN FETCH u.payments, u.groups where u.id = ?1")
     User findWithPayments(Long id);
+
+    List<User> findByEnabledIsTrue();
 }
