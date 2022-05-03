@@ -11,7 +11,9 @@ public class CurrentUser extends User {
     public CurrentUser(String username, String password,
                        Collection<? extends GrantedAuthority> authorities,
                        pl.coderslab.entity.User user) {
-        super(username, password, authorities);
+//        super(username, password, authorities);
+
+        super(username, password, user.getEnabled(), true , true,true,  authorities);
         this.user = user;
     }
     public pl.coderslab.entity.User getUser() {return user;}

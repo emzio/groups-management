@@ -20,17 +20,17 @@
             <form:form method="post" modelAttribute="userToUpdate">
                 <div class="flex-container">
                     <div class="form-label"> Login:</div>
-                    <form:input path="username" cssClass="form-control"/>
+                    <form:input path="username" cssClass="form-control"/><form:errors path="username"/>
                     <div class="form-label">Password:  </div>
-                    <form:input path="password" cssClass="form-control"/>
+                    <form:input path="password" cssClass="form-control"/><form:errors path="password"/>
                     <div class="form-label">Name:  </div>
-                    <form:input path="name" cssClass="form-control"/>
+                    <form:input path="name" cssClass="form-control"/><form:errors path="name"/>
                     <div class="form-label">Lastname: </div>
-                    <form:input path="lastName" cssClass="form-control"/>
+                    <form:input path="lastName" cssClass="form-control"/><form:errors path="lastName"/>
                     <div class="form-label">Email:  </div>
-                    <form:input path="email" cssClass="form-control"/>
-                    <div class="form-label">Groups:  </div>
-                    <form:select path="groups" items="${groups}" itemLabel="name" itemValue="id" cssClass="form-select"/>
+                    <form:input path="email" cssClass="form-control"/><form:errors path="email"/>
+                    <form:hidden path="groups"/>
+                    <form:hidden path="payments"/>
                 </div>
                 <input type="submit" value="Confirm update" class="btn btn-primary">
             </form:form>

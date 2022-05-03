@@ -4,12 +4,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -110,7 +112,10 @@ public class UserController {
     }
 
     @PostMapping("/registry")
-    private String proceedUserAddForm(User user){
+    private String proceedUserAddForm(@Valid User user, BindingResult result){
+        if(result.hasErrors()){
+            return "registry";
+        }
         userService.saveUser(user);
         return "redirect:login";
     }
@@ -135,37 +140,31 @@ public class UserController {
     }
 
     @PostMapping("/admin/users/update/{id}")
-    private String proceedUserUpdateForm(User user){
+//     @Valid Person student
+    private String proceedUserUpdateForm(@ModelAttribute("userToUpdate")@Valid User user, BindingResult result){
+        if (result.hasErrors()){
+            return "admin/users/update";
+        }
         userService.update(user);
         return "redirect:/admin/users";
     }
-
-//    @GetMapping("/admin/addPayment/{userId}")
-//    private String showAddPaymentToUserForm(Model model, @PathVariable Long userId){
-//        Payment payment = new Payment();
-//        model.addAttribute("userId", userId);
-//        model.addAttribute("payment", payment);
-//        return "admin/payments/addPayment";
-//    }
-//
-//    @PostMapping("/admin/addPayment/{userId}")
-//    private String showAddPaymentToUserForm(Payment payment, @RequestParam Long userId){
-//        User user = userService.findByIdWithGroups(userId);
-////        User user = userService.findWithPayments(userId);
-//        userService.addPaymentToUser(user, payment);
-//        return "redirect:/admin/users";
-//    }
-
 
     // Select Month:
     @GetMapping("/user/month/{userId}")
     private String showSelectMonthForm(Model model, @PathVariable Long userId){
         model.addAttribute("id", userId);
+
+        List<Month> months = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            months.add(Month.of(i));
+        }
+        model.addAttribute("months",months);
+        model.addAttribute("actualYear", LocalDate.now().getYear());
         return "admin/groups/selectMonth";
     }
 
     @PostMapping("/user/month/{userId}")
-    private String proceedSelectMonthForm(@RequestParam Long id, @RequestParam Integer year, @RequestParam Integer month){
+    private String proceedSelectMonthForm(@RequestParam Long id, @RequestParam Integer year, @RequestParam Month month){
         String date = String.valueOf(LocalDate.of(year, month, 1));
         return "redirect:/user/start/?date="+date.toString();
     }
@@ -180,7 +179,6 @@ public class UserController {
     Collection<GroupModel> findAllGroupsWithFreePlaces(){
         return groupService.findGroupsWithFreePlaces();
     }
-
 
     // PONIŻEJ AKCJE TESTOWE !!!
 

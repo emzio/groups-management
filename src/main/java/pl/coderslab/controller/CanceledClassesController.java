@@ -2,10 +2,12 @@ package pl.coderslab.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.entity.CanceledClasses;
 import pl.coderslab.service.CanceledClassesService;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
@@ -35,7 +37,10 @@ public class CanceledClassesController {
     }
 
     @PostMapping("/add")
-    private String proceedAddForm(CanceledClasses canceledClasses){
+    private String proceedAddForm(@Valid CanceledClasses canceledClasses, BindingResult result){
+        if (result.hasErrors()){
+            return "admin/canceledAdd";
+        }
         canceledClassesService.save(canceledClasses);
         return "redirect:/admin/canceled";
     }

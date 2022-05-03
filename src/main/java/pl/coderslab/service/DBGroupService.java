@@ -7,6 +7,8 @@ import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.GroupModelRepository;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -90,7 +92,8 @@ public class DBGroupService implements GroupService{
                         userService.save(user);
                     }
                 });
-        save(groupToUpdate);
+        save(groupModel);
+//        save(groupToUpdate);
     }
 // =======
 
@@ -99,4 +102,5 @@ public class DBGroupService implements GroupService{
         return findById(groupId).get().getSize() >= users.size();
 // >>>>>>> main
     }
+
 }
