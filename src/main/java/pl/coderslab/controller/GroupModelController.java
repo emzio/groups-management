@@ -2,12 +2,14 @@ package pl.coderslab.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.*;
 import java.util.*;
@@ -41,7 +43,10 @@ public class GroupModelController {
     }
 
     @PostMapping("/add")
-    private String proceedAddForm(GroupModel groupModel){
+    private String proceedAddForm(@Valid GroupModel groupModel, BindingResult result){
+        if(result.hasErrors()){
+            return "/admin/groups/add";
+        }
         groupService.save(groupModel);
         return "redirect:/admin/groups/"+groupModel.getId();
     }
@@ -157,12 +162,18 @@ public class GroupModelController {
     @GetMapping("/month/{id}")
     private String showSelectMonthForm(Model model, @PathVariable Long id){
         model.addAttribute("id", id);
+        List<Month> months = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            months.add(Month.of(i));
+        }
+        model.addAttribute("months",months);
+        model.addAttribute("actualYear", LocalDate.now().getYear());
         return "admin/groups/selectMonth";
     }
 
 //    @PostMapping("/monthtest")
     @PostMapping("/month/{groupId}")
-    public String proceedSelectMonthForm(@RequestParam String id, @RequestParam Integer year, @RequestParam Integer month){
+    public String proceedSelectMonthForm(@RequestParam String id, @RequestParam Integer year, @RequestParam Month month){
         String date = String.valueOf(LocalDate.of(year, month, 1));
         return "redirect:/admin/groups/"+ id+"?date="+date.toString();
     }

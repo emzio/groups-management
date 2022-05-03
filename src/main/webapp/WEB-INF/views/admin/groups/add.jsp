@@ -20,16 +20,16 @@
             <form:form method="post" modelAttribute="groupModel">
                 <div class="flex-container">
                     <div class="form-label">Name: </div>
-                    <form:input path="name" cssClass="form-control"/>
+                    <form:input path="name" cssClass="form-control"/><form:errors path="name"/>
 
                     <div class="form-label">Day:</div>
                     <form:radiobuttons path="dayOfWeek" items="${daysOfWeek}"></form:radiobuttons>
 
                     <div class="form-label">Time: </div>
-                    <form:input path="localTime" cssClass="form-control"/>
+                    <form:input path="localTime" cssClass="form-control"/><form:errors path="localTime"/>
 
                     <div class="form-label">Size: </div>
-                    <form:input path="size" cssClass="form-control"/>
+                    <form:input path="size" cssClass="form-control"/><form:errors path="size"/>
                 </div>
                 <input type="submit" value="Add Group" class="btn btn-primary">
             </form:form>

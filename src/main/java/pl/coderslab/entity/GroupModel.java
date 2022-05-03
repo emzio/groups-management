@@ -1,8 +1,10 @@
 package pl.coderslab.entity;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -22,13 +24,22 @@ public class GroupModel {
 //    @ManyToMany(mappedBy = "groups")
     private List<User> users = new ArrayList<>();
 
+    @NotBlank
     private String name;
 
 //    @DateTimeFormat(pattern = "EEE")
     private DayOfWeek dayOfWeek;
 
+
     @DateTimeFormat(pattern = "HHmm")
+    @NotNull
+//    ^(([0-9])|([0-1][0-9])|([2][0-3])):(([0-9])|([0-5][0-9]))$
+//    @Pattern(regexp = "^(([0-9])|([0-1][0-9])|([2][0-3]))(([0-9])|([0-5][0-9]))$")
     private LocalTime localTime;
+
+    @Digits(integer = 2, fraction = 0)
+    @Min(value = 1)
+
     private Integer size;
 
     @Override

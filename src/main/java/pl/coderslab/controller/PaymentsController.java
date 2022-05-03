@@ -96,11 +96,18 @@ public class PaymentsController {
     @GetMapping("/admin/user/month/{userId}")
     private String showSelectMonthForm(Model model, @PathVariable Long userId){
         model.addAttribute("id", userId);
+
+        List<Month> months = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            months.add(Month.of(i));
+        }
+        model.addAttribute("months",months);
+        model.addAttribute("actualYear", LocalDate.now().getYear());
         return "/admin/groups/selectMonth";
     }
 
     @PostMapping("/admin/user/month/{userId}")
-    private String proceedSelectMonthForm(@PathVariable Long userId, @RequestParam Long id, @RequestParam Integer year, @RequestParam Integer month) {
+    private String proceedSelectMonthForm(@PathVariable Long userId, @RequestParam Long id, @RequestParam Integer year, @RequestParam Month month) {
         String date = String.valueOf(LocalDate.of(year, month, 1));
         return "redirect:/admin/payments/"+userId+"?date=" + date;
     }

@@ -10,15 +10,23 @@
         <div class="card-body, text-black-50">
 <%--            <form method="post" action="/admin/groups/monthtest" >--%>
                 <form method="post">
-                <div class="form-label">Month:</div>
-                <input type="number"  name="month">
-                <div class="form-label">Year:</div>
-                <input type="number" name="year">
+                <label for="select" class="form-label" >Month:</label>
+<%--                <input type="number"  name="month">--%>
+                    <select id="select" name="month">
+                        <c:forEach items="${months}" var="singleMonth">
+                            <option>${singleMonth}</option>
+                        </c:forEach>
+                    </select>
+
+
+                <label for="year" class="form-label">Year:</label>
+                <input id="year" type="number" step="1" value="${actualYear}" name="year">
 
                 <input type="hidden" name="id" value="${id}">
 
                 <input type="submit" value="Select" class="btn btn-primary">
             </form>
+            Months: ${months}
         </div>
     </div>
 </div>
