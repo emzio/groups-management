@@ -92,7 +92,8 @@ public class DBGroupService implements GroupService{
                         userService.save(user);
                     }
                 });
-        save(groupToUpdate);
+        save(groupModel);
+//        save(groupToUpdate);
     }
 // =======
 
@@ -102,12 +103,4 @@ public class DBGroupService implements GroupService{
 // >>>>>>> main
     }
 
-    @Override
-     public void setLocalDate(GroupModel groupModel, String time){
-        if (time!=""){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalTime localTime = LocalTime.parse(time, formatter);
-            groupModel.setLocalTime(localTime);
-        }
-    }
 }

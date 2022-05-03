@@ -27,55 +27,13 @@
                     <form:radiobuttons path="dayOfWeek" items="${daysOfWeek}"></form:radiobuttons>
 
                     <div class="form-label">Time: </div>
-
                     <form:input type="time" path="localTime" cssClass="form-control"/><form:errors path="localTime"/>
-<%--                    <form:hidden path="localTime" />--%>
 
                     <div class="form-label">Size: </div>
                     <form:input path="size" cssClass="form-control"/><form:errors path="size"/>
                 </div>
-
-
-<%--                <label for="hour" class="form-label">hour</label>--%>
-<%--                <select id="hour" name="hour">--%>
-<%--                    <c:forEach items="${hours}" var="singleHour">--%>
-<%--                        <option>${singleHour}</option>--%>
-<%--                    </c:forEach>--%>
-<%--                </select>--%>
-<%--                <label for="minutes" class="form-label">minutes</label>--%>
-<%--                <select id="minutes" name="minute">--%>
-<%--                    <c:forEach items="${minutes}" var="singleMinute">--%>
-<%--                        <option>${singleMinute}</option>--%>
-<%--                    </c:forEach>--%>
-<%--                </select>--%>
-                <label for="time" class="form-label">time:</label>
-                <input type="time" id="time" name="time">
-
-
                 <input type="submit" value="Add Group" class="btn btn-primary">
             </form:form>
-
-
-            Hours: ${hours}
-            <br>
-            Minutes: ${minutes}
-<%--            <form:form method="post" modelAttribute="userToUpdate">--%>
-<%--                <div class="flex-container">--%>
-<%--                    <div class="form-label"> Login:</div>--%>
-<%--                    <form:input path="username" cssClass="form-control"/>--%>
-<%--                    <div class="form-label">Password:  </div>--%>
-<%--                    <form:input path="password" cssClass="form-control"/>--%>
-<%--                    <div class="form-label">Name:  </div>--%>
-<%--                    <form:input path="name" cssClass="form-control"/>--%>
-<%--                    <div class="form-label">Lastname: </div>--%>
-<%--                    <form:input path="lastName" cssClass="form-control"/>--%>
-<%--                    <div class="form-label">Email:  </div>--%>
-<%--                    <form:input path="email" cssClass="form-control"/>--%>
-<%--                    <div class="form-label">Groups:  </div>--%>
-<%--                    <form:select path="groups" items="${groups}" itemLabel="name" itemValue="id" cssClass="form-select"/>--%>
-<%--                </div>--%>
-<%--                <input type="submit" value="Confirm update" class="btn btn-primary">--%>
-<%--            </form:form>--%>
 
         </div>
     </div>
