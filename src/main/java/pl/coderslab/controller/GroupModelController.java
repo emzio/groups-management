@@ -175,7 +175,6 @@ public class GroupModelController {
         return "admin/groups/selectMonth";
     }
 
-//    @PostMapping("/monthtest")
     @PostMapping("/month/{groupId}")
     public String proceedSelectMonthForm(@RequestParam String id, @RequestParam Integer year, @RequestParam Month month){
         String date = String.valueOf(LocalDate.of(year, month, 1));
@@ -231,17 +230,6 @@ public class GroupModelController {
     @ModelAttribute("users")
     Collection<User> findAllUsers(){
         return userService.findAllActive();
-    }
-
-
-
-                        // TEST LISTY GRUP Z WOLNYMI MIEJSCAMI!!!!
-    @GetMapping("freeplaces")
-    @ResponseBody
-    private String findGroupsWithFreePlaces(){
-        return groupService.findAllJoiningUsers().stream()
-                .map(groupModel -> groupModel.getName() + " size: " + groupModel.getSize() + " members: " + String.valueOf(groupModel.getUsers().size()))
-                .collect(Collectors.joining(" | ")) + "<br>  groupModelsWithFreePlaces: " + groupService.findGroupsWithFreePlaces().toString();
     }
 
 }

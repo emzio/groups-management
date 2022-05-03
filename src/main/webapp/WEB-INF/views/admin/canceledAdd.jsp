@@ -12,7 +12,7 @@
     <form:form method="post" modelAttribute="canceled">
         <div>
             <div class="form-label">LocalDate(YearMonthDay): </div>
-            <form:input path="localDate" cssClass="form-control"/>
+            <form:input type="date" path="localDate" cssClass="form-control"/><form:errors path="localDate"/>
         </div>
         <input type="submit" value="Add Date" class="btn btn-danger">
     </form:form>
