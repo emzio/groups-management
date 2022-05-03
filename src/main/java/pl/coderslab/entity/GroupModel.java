@@ -31,7 +31,7 @@ public class GroupModel {
     private DayOfWeek dayOfWeek;
 
 
-    @DateTimeFormat(pattern = "HHmm")
+    @DateTimeFormat(pattern = "HH:mm")
     @NotNull
 //    ^(([0-9])|([0-1][0-9])|([2][0-3])):(([0-9])|([0-5][0-9]))$
 //    @Pattern(regexp = "^(([0-9])|([0-1][0-9])|([2][0-3]))(([0-9])|([0-5][0-9]))$")

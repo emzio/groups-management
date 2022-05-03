@@ -12,6 +12,7 @@ import pl.coderslab.service.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,15 +40,31 @@ public class GroupModelController {
     private String showAddForm(Model model){
         GroupModel groupModel = new GroupModel();
         model.addAttribute("groupModel" , groupModel);
+        List<Integer> hours = new ArrayList<>();
+        for (int i = 1; i <= 24; i++) {
+            hours.add(i);
+        }
+        List<Integer> minutes = new ArrayList<>();
+
+        for (int i = 0; i <= 59; i++) {
+            minutes.add(i);
+        }
+        model.addAttribute("hours", hours);
+        model.addAttribute("minutes", minutes);
+
+
         return "/admin/groups/add";
     }
 
     @PostMapping("/add")
-    private String proceedAddForm(@Valid GroupModel groupModel, BindingResult result){
+    private String proceedAddForm(@Valid GroupModel groupModel, BindingResult result,@RequestParam String time){
         if(result.hasErrors()){
             return "/admin/groups/add";
         }
+        groupService.setLocalDate(groupModel, time);
+
         groupService.save(groupModel);
+
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 

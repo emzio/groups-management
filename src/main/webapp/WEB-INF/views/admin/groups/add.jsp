@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="../../header.jsp" %>
 
 <link rel="stylesheet" href="../../../../resources/bootstrap.css" />
@@ -26,14 +27,38 @@
                     <form:radiobuttons path="dayOfWeek" items="${daysOfWeek}"></form:radiobuttons>
 
                     <div class="form-label">Time: </div>
-                    <form:input path="localTime" cssClass="form-control"/><form:errors path="localTime"/>
+
+                    <form:input type="time" path="localTime" cssClass="form-control"/><form:errors path="localTime"/>
+<%--                    <form:hidden path="localTime" />--%>
 
                     <div class="form-label">Size: </div>
                     <form:input path="size" cssClass="form-control"/><form:errors path="size"/>
                 </div>
+
+
+<%--                <label for="hour" class="form-label">hour</label>--%>
+<%--                <select id="hour" name="hour">--%>
+<%--                    <c:forEach items="${hours}" var="singleHour">--%>
+<%--                        <option>${singleHour}</option>--%>
+<%--                    </c:forEach>--%>
+<%--                </select>--%>
+<%--                <label for="minutes" class="form-label">minutes</label>--%>
+<%--                <select id="minutes" name="minute">--%>
+<%--                    <c:forEach items="${minutes}" var="singleMinute">--%>
+<%--                        <option>${singleMinute}</option>--%>
+<%--                    </c:forEach>--%>
+<%--                </select>--%>
+                <label for="time" class="form-label">time:</label>
+                <input type="time" id="time" name="time">
+
+
                 <input type="submit" value="Add Group" class="btn btn-primary">
             </form:form>
 
+
+            Hours: ${hours}
+            <br>
+            Minutes: ${minutes}
 <%--            <form:form method="post" modelAttribute="userToUpdate">--%>
 <%--                <div class="flex-container">--%>
 <%--                    <div class="form-label"> Login:</div>--%>

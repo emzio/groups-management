@@ -7,6 +7,8 @@ import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.GroupModelRepository;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -98,5 +100,14 @@ public class DBGroupService implements GroupService{
     public boolean verificationOfOversize(Long groupId, List<User> users){
         return findById(groupId).get().getSize() >= users.size();
 // >>>>>>> main
+    }
+
+    @Override
+     public void setLocalDate(GroupModel groupModel, String time){
+        if (time!=""){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime localTime = LocalTime.parse(time, formatter);
+            groupModel.setLocalTime(localTime);
+        }
     }
 }

@@ -29,4 +29,6 @@ public interface GroupService {
 // =======
     public boolean verificationOfOversize(Long groupId, List<User> users);
 // >>>>>>> main
+
+    void setLocalDate(GroupModel groupModel, String time);
 }
