@@ -5,6 +5,8 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,8 +17,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
     @Column(nullable = false, unique = true, length = 60)
     private String username;//login
+
+    @NotBlank
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -31,10 +37,13 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Payment> payments = new ArrayList<>();
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String lastName;
 
+    @Email
     private String email;
 
     private Boolean enabled;
