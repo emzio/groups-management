@@ -20,11 +20,13 @@
             <form:form method="post" modelAttribute="payment">
                 <div class="flex-container">
                     <div class="form-label">Payment Code: </div>
-                    <form:input path="paymentCode" cssClass="form-control"/>
+                    <form:input path="paymentCode" cssClass="form-control" pattern="^([0-9]{4}-)([0][1-9]|[1][0-2])$"/><form:errors path="paymentCode"/>
 
                     <div class="form-label">Amount:</div>
-                    <form:input path="amount" cssClass="form-control"/>
+                    <form:input type="number" step=".01" path="amount" cssClass="form-control"/><form:errors path="amount"/>
 
+                    <div class="form-label">Date of payment:</div>
+                    <form:input type="date" path="dateOfPayment" cssClass="form-control"/><form:errors path="dateOfPayment"/>
                 </div>
                 <input type="submit" value="Add Payment" class="btn btn-primary">
                 <input type="hidden" name="userId" value="${userId}">

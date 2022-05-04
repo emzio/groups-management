@@ -3,6 +3,7 @@ package pl.coderslab.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -14,9 +15,16 @@ public class Payment {
 //    @Column(name = "id", nullable = false)
     private Long id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private LocalDate dateOfPayment;
 
+    @Pattern(regexp = "^([0-9]{4}-)([0][1-9]|[1][0-2])$")
+    @NotBlank
     private String paymentCode;
+
+    @Digits(integer = 8, fraction = 2)
+    @Min(value = 0)
     private BigDecimal amount;
 
     public Long getId() {

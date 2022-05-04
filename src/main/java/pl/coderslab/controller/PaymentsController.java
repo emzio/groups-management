@@ -2,8 +2,10 @@ package pl.coderslab.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
+import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.CalendarCellService;
@@ -11,6 +13,7 @@ import pl.coderslab.service.DayOfWeekService;
 import pl.coderslab.service.PaymentService;
 import pl.coderslab.service.UserService;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -121,9 +124,11 @@ public class PaymentsController {
     }
 
     @PostMapping("/admin/addPayment/{userId}")
-    private String showAddPaymentToUserForm(Payment payment, @RequestParam Long userId){
+    private String showAddPaymentToUserForm(@Valid Payment payment, BindingResult result, @RequestParam Long userId){
+        if (result.hasErrors()){
+            return "admin/payments/addPayment";
+        }
         User user = userService.findByIdWithGroups(userId);
-//        User user = userService.findWithPayments(userId);
         userService.addPaymentToUser(user, payment);
         return "redirect:/admin/payments/"+userId;
     }

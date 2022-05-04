@@ -8,10 +8,8 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body, text-black-50">
-<%--            <form method="post" action="/admin/groups/monthtest" >--%>
                 <form method="post">
                 <label for="select" class="form-label" >Month:</label>
-<%--                <input type="number"  name="month">--%>
                     <select id="select" name="month">
                         <c:forEach items="${months}" var="singleMonth">
                             <option>${singleMonth}</option>
@@ -26,7 +24,7 @@
 
                 <input type="submit" value="Select" class="btn btn-primary">
             </form>
-            Months: ${months}
+
         </div>
     </div>
 </div>
