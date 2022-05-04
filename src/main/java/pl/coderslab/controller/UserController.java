@@ -140,7 +140,6 @@ public class UserController {
     }
 
     @PostMapping("/admin/users/update/{id}")
-//     @Valid Person student
     private String proceedUserUpdateForm(@ModelAttribute("userToUpdate")@Valid User user, BindingResult result){
         if (result.hasErrors()){
             return "admin/users/update";

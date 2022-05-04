@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     // add Payment
     @Override
     public void addPaymentToUser(User user, Payment payment) {
-        payment.setDateOfPayment(LocalDate.now());
+//        payment.setDateOfPayment(LocalDate.now());
         user.getPayments().add(payment);
         paymentService.save(payment);
         userRepository.save(user);
