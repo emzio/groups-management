@@ -40,6 +40,18 @@ public class DBGroupService implements GroupService{
     }
 
     @Override
+    public void deleteGroupModel(GroupModel groupModel){
+        GroupModel joiningUsers = findJoiningUsers(groupModel.getId());
+        joiningUsers.getUsers().stream()
+                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
+                .forEach(user -> {
+                            user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
+                            userService.save(user);
+                        }
+                );
+        deleteById(groupModel.getId());
+    }
+    @Override
     public void deleteById(Long id) {
         groupModelRepository.deleteById(id);
     }
@@ -64,6 +76,7 @@ public class DBGroupService implements GroupService{
         return groupModels;
     }
 
+
     @Override
     public List<GroupModel> findGroupsWithFreePlaces() {
         List<GroupModel> groupModelsWithFreePlaces = findAllJoiningUsers().stream()
@@ -76,16 +89,26 @@ public class DBGroupService implements GroupService{
     @Override
     @Transactional
     public void editGroupModel(GroupModel groupModel) {
+//        GroupModel groupToUpdate = findJoiningUsers(groupModel.getId());
+//        groupToUpdate.getUsers().forEach(user -> {
+//            user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
+//            userService.save(user);
+//        });
+        // zmiany eager:
         GroupModel groupToUpdate = findJoiningUsers(groupModel.getId());
-        groupToUpdate.getUsers().forEach(user -> {
-            user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
-            userService.save(user);
-        });
+        groupToUpdate.getUsers().stream()
+                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
+                .forEach(user -> {
+                    user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
+                    userService.save(user);
+                });
+
         // groupModel.getUserListId() ???
         groupToUpdate.getUsers().removeIf(u -> !groupModel.getUsers().stream().map(User::getId).collect(Collectors.toList()).contains(u.getId()));
         save(groupToUpdate);
         groupToUpdate.setUsers(groupModel.getUsers());
-        groupToUpdate.getUsers()
+        groupToUpdate.getUsers().stream()
+                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
                 .forEach(user -> {
                     if (!user.getGroups().stream().map(GroupModel::getId).collect(Collectors.toList()).contains(groupModel.getId())) {
                         user.getGroups().add(groupModel);

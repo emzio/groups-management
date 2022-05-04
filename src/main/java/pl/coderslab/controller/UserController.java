@@ -43,7 +43,6 @@ public class UserController {
 
         if (customUser != null && customUser.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
-//            model.addAttribute("users", userService.findAllActive());
             return "/admin/adminstart";
         }
 
@@ -56,7 +55,7 @@ public class UserController {
         }
         model.addAttribute("month", month.toString());
         model.addAttribute("year", year.toString());
-        User user = userService.findByUserName(customUser.getUsername());
+        User user = userService.findByUserNameWithGroupsAndPayments(customUser.getUsername());
         return userStartView(model, user, month, year);
     }
 
@@ -85,7 +84,7 @@ public class UserController {
     // findAll
     @GetMapping("/admin/users")
     private String findAllUsers(Model model){
-        model.addAttribute("users", userService.findAllActive());
+        model.addAttribute("users", userService.findAllActiveWithGroupsAndPayments());
         return "/admin/users/users";
     }
     // add admin
@@ -131,9 +130,9 @@ public class UserController {
     //update
     @GetMapping("/admin/users/update/{id}")
     private String showUserUpdateForm(@PathVariable Long id, Model model){
-        Optional<User> optionalUser = userService.findById(id);
-        if(optionalUser.isPresent()){
-            model.addAttribute("userToUpdate",optionalUser.get());
+        User user = userService.findByIdWithGroupsAndPayments(id);
+        if(user!=null){
+            model.addAttribute("userToUpdate",user);
             return "admin/users/update";
         }
         return "redirect:/admin/groups/notfound";
@@ -191,5 +190,18 @@ public class UserController {
         user.setPassword("admin3");
         userService.saveAdmin(user);
         return "admin2";
+    }
+
+    @GetMapping("test/{id}")
+    @ResponseBody
+    private String testUserNotEager(@PathVariable Long id){
+        List<User> allActive = userService.findAllActiveWithGroupsAndPayments();
+        return allActive.stream()
+                .map(user -> user.getPayments()+ "|||||||||||" + user.getGroups() )
+                .collect(Collectors.joining("<br>"));
+
+//        User byIdWithGroupsAndPayments = userService.findByIdWithGroupsAndPayments(id);
+//        List<GroupModel> groupsForUserId = userService.findGroupsForUserId(id);
+//        return "groupModels : " + groupsForUserId + "<br>" + "payments: "+ byIdWithGroupsAndPayments.getPayments() + "<br>" + " groups " + byIdWithGroupsAndPayments.getGroups();
     }
 }

@@ -60,7 +60,7 @@ public class GroupModelController {
         }
         GroupModel joiningUsers = groupService.findJoiningUsers(id);
 
-        List<User> usersOutsideGroup = userService.findAllActive();
+        List<User> usersOutsideGroup = userService.findAllActiveWithGroupsAndPayments();
         usersOutsideGroup.removeIf(user -> joiningUsers.getUsers().stream()
                 .map(User::getId)
                 .collect(Collectors.toList())
@@ -84,10 +84,11 @@ public class GroupModelController {
         }
 
         groupModel.getUsers().stream()
-                .forEach(user -> {
-                    user.getGroups().add(groupModel);
-                    userService.save(user);
-                });
+                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
+                        .forEach(user -> {
+                            user.getGroups().add(groupModel);
+                            userService.save(user);
+                        });
 //        groupService.save(groupModel);
         return "redirect:/admin/groups/"+groupModel.getId();
     }
@@ -107,17 +108,18 @@ public class GroupModelController {
 
     @PostMapping("/delete/{id}")
     private String proceedDeleteGroup(GroupModel groupModel){
-        GroupModel joiningUsers = groupService.findJoiningUsers(groupModel.getId());
-        List<User> users = joiningUsers.getUsers();
-        for (User user : users) {
-            user.getGroups().remove(joiningUsers);
-            userService.save(user);
-        }
-//        groupService.findJoiningUsers(groupModel.getId()).getUsers().stream()
-//                        .forEach(user -> {user.getGroups().remove(groupModel);
-//                        userService.save(user);});
 
-        groupService.deleteById(groupModel.getId());
+//        GroupModel joiningUsers = groupService.findJoiningUsers(groupModel.getId());
+//        joiningUsers.getUsers().stream()
+//                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
+//                .forEach(user -> {
+//                    user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
+//                    userService.save(user);
+//                }
+//                );
+//        groupService.deleteById(groupModel.getId());
+
+        groupService.deleteGroupModel(groupModel);
         return "redirect:/user/start";
     }
 

@@ -109,9 +109,9 @@
                     <td>
                         Email
                     </td>
-                    <td>
-                        Groups
-                    </td>
+<%--                    <td>--%>
+<%--                        Groups--%>
+<%--                    </td>--%>
                 </tr>
                 </thead>
                 <tbody>
@@ -126,9 +126,9 @@
                         <td>
                                 ${singleUser.getEmail()}
                         </td>
-                        <td>
-                                ${singleUser.getGroups()}
-                        </td>
+<%--                        <td>--%>
+<%--                                ${singleUser.getGroups()}--%>
+<%--                        </td>--%>
                     </tr>
                 </c:forEach>
                 </tbody>

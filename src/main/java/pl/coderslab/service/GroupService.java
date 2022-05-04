@@ -16,6 +16,7 @@ public interface GroupService {
 
     public void deleteById(Long id);
 
+    void deleteGroupModel(GroupModel groupModel);
     public void update(GroupModel groupModel);
 
     public GroupModel findJoiningUsers(Long id);
