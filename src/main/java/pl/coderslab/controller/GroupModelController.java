@@ -108,17 +108,6 @@ public class GroupModelController {
 
     @PostMapping("/delete/{id}")
     private String proceedDeleteGroup(GroupModel groupModel){
-
-//        GroupModel joiningUsers = groupService.findJoiningUsers(groupModel.getId());
-//        joiningUsers.getUsers().stream()
-//                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
-//                .forEach(user -> {
-//                    user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
-//                    userService.save(user);
-//                }
-//                );
-//        groupService.deleteById(groupModel.getId());
-
         groupService.deleteGroupModel(groupModel);
         return "redirect:/user/start";
     }
