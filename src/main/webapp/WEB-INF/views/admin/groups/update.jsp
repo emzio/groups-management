@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-body, text-black-50">
             <h3 class="text-danger"><c:if test="${oversize}">
-                To many users for group size: ${groupModel.getSize()}
+                To many users for group.
             </c:if></h3>
 
             <form:form method="post" modelAttribute="groupModel">

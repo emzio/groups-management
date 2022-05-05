@@ -175,4 +175,12 @@ public class UserServiceImpl implements UserService {
     public List<GroupModel> findGroupsForUserId(Long id){
         return userRepository.findGroupsForUserId(id);
     }
+
+    @Override
+    public List<User> findUsersOutOfGroup(GroupModel groupModel){
+
+
+        return userRepository.findUsersOutOfGroup(groupModel);
+    }
+
 }

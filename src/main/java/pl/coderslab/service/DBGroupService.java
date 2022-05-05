@@ -116,14 +116,25 @@ public class DBGroupService implements GroupService{
                     }
                 });
         save(groupModel);
-//        save(groupToUpdate);
     }
 // =======
 
     @Override
-    public boolean verificationOfOversize(Long groupId, List<User> users){
-        return findById(groupId).get().getSize() >= users.size();
+    public boolean verificationOfOversize(GroupModel groupModel, List<User> users){
+        return groupModel.getSize() >= users.size();
 // >>>>>>> main
     }
+
+    @Override
+    public void addUserToGroup(GroupModel groupModel){
+        groupModel.getUsers().stream()
+                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
+                .forEach(user -> {
+                    user.getGroups().add(groupModel);
+                    userService.save(user);
+                });
+//        groupService.save(groupModel);
+    }
+
 
 }

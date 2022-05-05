@@ -195,10 +195,15 @@ public class UserController {
     @GetMapping("test/{id}")
     @ResponseBody
     private String testUserNotEager(@PathVariable Long id){
-        List<User> allActive = userService.findAllActiveWithGroupsAndPayments();
-        return allActive.stream()
-                .map(user -> user.getPayments()+ "|||||||||||" + user.getGroups() )
+
+        return userService.findUsersOutOfGroup(groupService.findJoiningUsers(id)).stream()
+                .map(user -> String.join("|||",user.getName(), user.getId().toString(), user.getUsername()))
                 .collect(Collectors.joining("<br>"));
+
+//        List<User> allActive = userService.findAllActiveWithGroupsAndPayments();
+//        return allActive.stream()
+//                .map(user -> user.getPayments()+ "|||||||||||" + user.getGroups() )
+//                .collect(Collectors.joining("<br>"));
 
 //        User byIdWithGroupsAndPayments = userService.findByIdWithGroupsAndPayments(id);
 //        List<GroupModel> groupsForUserId = userService.findGroupsForUserId(id);

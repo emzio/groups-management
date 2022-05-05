@@ -45,4 +45,6 @@ public interface UserService {
     public User findByUserNameWithGroupsAndPayments(String username);
 
     public List<GroupModel> findGroupsForUserId(Long id);
+
+    List<User> findUsersOutOfGroup(GroupModel groupModel);
 }
