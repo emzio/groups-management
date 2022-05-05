@@ -25,15 +25,15 @@ public class User {
     @NotBlank
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-//    @ManyToMany
+//    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<GroupModel> groups = new ArrayList<>();
 
 
 
-//   @OneToMany
-    @OneToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
+   @OneToMany
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "user_id")
     private List<Payment> payments = new ArrayList<>();
 

@@ -16,6 +16,7 @@ public interface GroupService {
 
     public void deleteById(Long id);
 
+    void deleteGroupModel(GroupModel groupModel);
     public void update(GroupModel groupModel);
 
     public GroupModel findJoiningUsers(Long id);
@@ -27,7 +28,8 @@ public interface GroupService {
 // <<<<<<< feature/user_update
     void editGroupModel(GroupModel groupModel);
 // =======
-    public boolean verificationOfOversize(Long groupId, List<User> users);
+    public boolean verificationOfOversize(GroupModel groupModel, List<User> users);
 // >>>>>>> main
 
+    void addUserToGroup(GroupModel groupModel);
 }

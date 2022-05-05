@@ -4,6 +4,7 @@ import org.hibernate.Hibernate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.Role;
 import pl.coderslab.entity.User;
@@ -11,12 +12,10 @@ import pl.coderslab.repository.RoleRepository;
 import pl.coderslab.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -37,15 +36,61 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public User findByUserNameWithGroupsAndPayments(String username) {
+        User byUsername = userRepository.findByUsername(username);
+        Hibernate.initialize(byUsername.getPayments());
+        Hibernate.initialize(byUsername.getGroups());
+        return byUsername;
+    }
+
     //find all
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+
     @Override
     public List<User> findAllActive(){
         return userRepository.findByEnabledIsTrue();
+    }
+
+    @Override
+    public List<User> findAllActiveWithGroupsAndPayments(){
+        List<User> users = userRepository.findByEnabledIsTrue();
+        users.stream()
+                .forEach(user -> {
+                    Hibernate.initialize(user.getGroups());
+                    Hibernate.initialize(user.getPayments());
+                });
+        return users;
+    }
+
+    // findById:
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public User findByIdWithGroups(Long id) {
+        User user = userRepository.findById(id).get();
+        Hibernate.initialize(user.getGroups());
+        return user;
+    }
+    @Override
+    public User findByIdWithGroupsAndPayments(Long id){
+        User user = userRepository.findById(id).get();
+        Hibernate.initialize(user.getPayments());
+        Hibernate.initialize(user.getGroups());
+        return user;
+    }
+
+    @Override
+    public User findWithPayments(Long id){
+        return userRepository.findWithPayments(id);
     }
 
 //    add:
@@ -54,7 +99,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         Role userRole = roleRepository.findByName("ROLE_USER");
-//        Role userRole = roleRepository.findByName("ROLE_ADMIN");
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
         userRepository.save(user);
     }
@@ -69,10 +113,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
+
 
     // delete
 
@@ -86,7 +127,6 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(user);
         }
-//        userRepository.deleteById(id);
     }
 
     //update:
@@ -106,25 +146,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-
-
-    @Override
-    public User findByIdWithGroups(Long id) {
-        User user = userRepository.findById(id).get();
-        Hibernate.initialize(user.getGroups());
-        return user;
-    }
-    @Override
-    public User findByIdWithGroupsAndPayments(Long id){
-        User user = userRepository.findById(id).get();
-        Hibernate.initialize(user.getPayments());
-        return user;
-    }
-
-    // add Payment
+    //  Payment
     @Override
     public void addPaymentToUser(User user, Payment payment) {
-//        payment.setDateOfPayment(LocalDate.now());
         user.getPayments().add(payment);
         paymentService.save(payment);
         userRepository.save(user);
@@ -139,10 +163,6 @@ public class UserServiceImpl implements UserService {
         paymentService.delete(payment);
     }
 
-    @Override
-    public User findWithPayments(Long id){
-        return userRepository.findWithPayments(id);
-    }
 
     @Override
     @Transactional
@@ -150,5 +170,17 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+// test
+
+    public List<GroupModel> findGroupsForUserId(Long id){
+        return userRepository.findGroupsForUserId(id);
+    }
+
+    @Override
+    public List<User> findUsersOutOfGroup(GroupModel groupModel){
+
+
+        return userRepository.findUsersOutOfGroup(groupModel);
+    }
 
 }

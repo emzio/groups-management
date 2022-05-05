@@ -60,16 +60,17 @@ public class GroupModelController {
         }
         GroupModel joiningUsers = groupService.findJoiningUsers(id);
 
-        List<User> usersOutsideGroup = userService.findAllActive();
-        usersOutsideGroup.removeIf(user -> joiningUsers.getUsers().stream()
-                .map(User::getId)
-                .collect(Collectors.toList())
-                .contains(user.getId())
-        );
-        usersOutsideGroup.removeAll(joiningUsers.getUsers());
+        List<User> usersOutsideGroup = userService.findUsersOutOfGroup(joiningUsers);
+
+//        List<User> usersOutsideGroup = userService.findAllActiveWithGroupsAndPayments();
+//        usersOutsideGroup.removeIf(user -> joiningUsers.getUsers().stream()
+//                .map(User::getId)
+//                .collect(Collectors.toList())
+//                .contains(user.getId())
+//        );
+////        usersOutsideGroup.removeAll(joiningUsers.getUsers());
 
         model.addAttribute("usersOutsideGroup", usersOutsideGroup);
-
         model.addAttribute("groupForUser", joiningUsers);
         return "admin/groups/adduser";
     }
@@ -83,12 +84,15 @@ public class GroupModelController {
             return "redirect:/admin/groups/addUser/{id}?oversize=true";
         }
 
-        groupModel.getUsers().stream()
-                .forEach(user -> {
-                    user.getGroups().add(groupModel);
-                    userService.save(user);
-                });
-//        groupService.save(groupModel);
+        groupService.addUserToGroup(groupModel);
+
+//        groupModel.getUsers().stream()
+//                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
+//                        .forEach(user -> {
+//                            user.getGroups().add(groupModel);
+//                            userService.save(user);
+//                        });
+////        groupService.save(groupModel);
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 
@@ -99,7 +103,6 @@ public class GroupModelController {
         Optional<GroupModel> groupModelOptional = groupService.findById(id);
         if(groupModelOptional.isPresent()){
             model.addAttribute("toDelete", groupService.findById(id).get());
-
             return "/admin/groups/delete";
         }
         return "redirect:/admin/groups/notfound";
@@ -107,17 +110,7 @@ public class GroupModelController {
 
     @PostMapping("/delete/{id}")
     private String proceedDeleteGroup(GroupModel groupModel){
-        GroupModel joiningUsers = groupService.findJoiningUsers(groupModel.getId());
-        List<User> users = joiningUsers.getUsers();
-        for (User user : users) {
-            user.getGroups().remove(joiningUsers);
-            userService.save(user);
-        }
-//        groupService.findJoiningUsers(groupModel.getId()).getUsers().stream()
-//                        .forEach(user -> {user.getGroups().remove(groupModel);
-//                        userService.save(user);});
-
-        groupService.deleteById(groupModel.getId());
+        groupService.deleteGroupModel(groupModel);
         return "redirect:/user/start";
     }
 
@@ -138,27 +131,10 @@ public class GroupModelController {
         if(result.hasErrors()){
             return "/admin/groups/update";
         }
-        if (!groupService.verificationOfOversize(groupModel.getId(), groupModel.getUsers())){
+        if (!groupService.verificationOfOversize(groupModel, groupModel.getUsers())){
             return "redirect:/admin/groups/update/{id}?oversize=true";
         }
         groupService.editGroupModel(groupModel);
-// =======
-//     private String proceedUpdateForm(GroupModel groupModel){
-
-//         GroupModel groupToUpdate = groupService.findJoiningUsers(groupModel.getId());
-//         List<User> formerUsers = groupToUpdate.getUsers();
-//         formerUsers.stream()
-//                         .forEach(user -> {
-//                             user.getGroups().remove(groupToUpdate);
-//                             userService.save(user);
-//                         });
-//         groupModel.getUsers().stream()
-//                         .forEach(user -> {
-//                             user.getGroups().add(groupModel);
-//                             userService.save(user);
-//                         });
-//         groupService.save(groupModel);
-// >>>>>>> main
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 

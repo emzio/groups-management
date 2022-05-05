@@ -35,9 +35,16 @@ public interface UserService {
     public void save(User user);
 
     User findWithPayments(Long id);
+
     void addPaymentToUser(User user, Payment payment);
 
     void deletePaymentForUser(Long userId, Long paymentId);
 
     List<User> findAllActive();
+    public List<User> findAllActiveWithGroupsAndPayments();
+    public User findByUserNameWithGroupsAndPayments(String username);
+
+    public List<GroupModel> findGroupsForUserId(Long id);
+
+    List<User> findUsersOutOfGroup(GroupModel groupModel);
 }

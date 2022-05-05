@@ -18,12 +18,12 @@ import java.util.stream.IntStream;
 @Service
 public class CalendarCellService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final GroupModelRepository groupModelRepository;
     private final CanceledClassesRepository canceledClassesRepository;
 
-    public CalendarCellService(UserRepository userRepository, GroupModelRepository groupModelRepository, CanceledClassesRepository canceledClassesRepository) {
-        this.userRepository = userRepository;
+    public CalendarCellService(UserService userService, GroupModelRepository groupModelRepository, CanceledClassesRepository canceledClassesRepository) {
+        this.userService = userService;
         this.groupModelRepository = groupModelRepository;
         this.canceledClassesRepository = canceledClassesRepository;
     }
@@ -84,10 +84,10 @@ public class CalendarCellService {
     }
 
     public List<CalendarCell> calendarCardForUser(Long userId, Month month, Year year){
-        Optional<User> userOptional = userRepository.findById(userId);
+        User user = userService.findByIdWithGroupsAndPayments(userId);
         List<CalendarCell> cells = emptyCalendarCard(month, year);
-        if(userOptional.isPresent()){
-            List<GroupModel> groups = userOptional.get().getGroups();
+        if(user!=null){
+            List<GroupModel> groups = user.getGroups();
 
             for (GroupModel group : groups) {
                 List<CalendarCell> cellsForGroup = calendarCardForGroup(group.getId(), month, year);

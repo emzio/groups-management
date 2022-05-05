@@ -48,10 +48,11 @@ public class PaymentsController {
 
 
 //        User user = userService.findWithPayments(userId);
-        User user = userService.findByIdWithGroups(userId);
+        User user = userService.findByIdWithGroupsAndPayments(userId);
         List<Payment> payments = new ArrayList<>();
         if(user!=null) {
-            payments = userService.findByIdWithGroups(userId).getPayments();
+//            payments = userService.findByIdWithGroups(userId).getPayments();
+            payments = user.getPayments();
         }
         model.addAttribute("paymentsForUser", payments);
         model.addAttribute("userId", userId);
@@ -128,7 +129,7 @@ public class PaymentsController {
         if (result.hasErrors()){
             return "admin/payments/addPayment";
         }
-        User user = userService.findByIdWithGroups(userId);
+        User user = userService.findByIdWithGroupsAndPayments(userId);
         userService.addPaymentToUser(user, payment);
         return "redirect:/admin/payments/"+userId;
     }
