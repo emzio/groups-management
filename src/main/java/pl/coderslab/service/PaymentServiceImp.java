@@ -48,17 +48,4 @@ public class PaymentServiceImp implements PaymentService{
         paymentsInfo.put("paymentAmount", multiply);
         return paymentsInfo;
     }
-//    @Override
-//    public Map<String, BigDecimal> paymentAndClassesForUser(List<CalendarCell> cells){
-//        Map<String, BigDecimal> paymentsInfo = new HashMap<>();
-//        long count = cells.stream()
-//                .filter(calendarCell -> calendarCell.getAddToFee() != null)
-//                .filter(calendarCell -> calendarCell.getAddToFee() == true)
-//                .count();
-//        paymentsInfo.put("numberOfClasses", BigDecimal.valueOf(count));
-//        BigDecimal paymentRate = new MockPaymentRate().getPaymentRate();
-//        BigDecimal multiply = paymentRate.multiply(BigDecimal.valueOf(count));
-//        paymentsInfo.put("paymentAmount", multiply);
-//        return paymentsInfo;
-//    }
 }

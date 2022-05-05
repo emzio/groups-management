@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
+import pl.coderslab.repository.UserRepository;
 import pl.coderslab.service.*;
 
 import javax.validation.Valid;
@@ -195,6 +196,7 @@ public class UserController {
     @GetMapping("test/{id}")
     @ResponseBody
     private String testUserNotEager(@PathVariable Long id){
+
 
         return userService.findUsersOutOfGroup(groupService.findJoiningUsers(id)).stream()
                 .map(user -> String.join("|||",user.getName(), user.getId().toString(), user.getUsername()))

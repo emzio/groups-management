@@ -14,7 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
     @Query("SELECT u FROM User u JOIN FETCH u.payments where u.id = ?1")
-//    @Query("SELECT u FROM User u JOIN FETCH u.payments, u.groups where u.id = ?1")
     User findWithPayments(Long id);
 
     List<User> findByEnabledIsTrue();
@@ -22,9 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u.groups from User u where u.id = ?1")
     List<GroupModel> findGroupsForUserId(Long id);
 
-//    @Query("SELECT DISTINCT u FROM User u JOIN FETCH u.groups WHERE ?1 not member of u.groups and u.enabled=true ")
     @Query("SELECT u FROM User u WHERE ?1 not member of u.groups and u.enabled=true ")
     List<User> findUsersOutOfGroup(GroupModel groupModel);
 
-    List<User> findDistinctByGroupsNotContaining(GroupModel groupModel);
 }

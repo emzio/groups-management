@@ -11,8 +11,9 @@ import pl.coderslab.service.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,16 +60,7 @@ public class GroupModelController {
             model.addAttribute("oversize", true);
         }
         GroupModel joiningUsers = groupService.findJoiningUsers(id);
-
         List<User> usersOutsideGroup = userService.findUsersOutOfGroup(joiningUsers);
-
-//        List<User> usersOutsideGroup = userService.findAllActiveWithGroupsAndPayments();
-//        usersOutsideGroup.removeIf(user -> joiningUsers.getUsers().stream()
-//                .map(User::getId)
-//                .collect(Collectors.toList())
-//                .contains(user.getId())
-//        );
-////        usersOutsideGroup.removeAll(joiningUsers.getUsers());
 
         model.addAttribute("usersOutsideGroup", usersOutsideGroup);
         model.addAttribute("groupForUser", joiningUsers);
@@ -83,16 +75,7 @@ public class GroupModelController {
         if (groupModel.getSize() < preUpdatedUsersNumber + groupModel.getUsers().size()){
             return "redirect:/admin/groups/addUser/{id}?oversize=true";
         }
-
         groupService.addUserToGroup(groupModel);
-
-//        groupModel.getUsers().stream()
-//                .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
-//                        .forEach(user -> {
-//                            user.getGroups().add(groupModel);
-//                            userService.save(user);
-//                        });
-////        groupService.save(groupModel);
         return "redirect:/admin/groups/"+groupModel.getId();
     }
 
@@ -125,8 +108,6 @@ public class GroupModelController {
     }
 
     @PostMapping("/update/{id}")
-// <<<<<<< feature/user_update
-  
     public String proceedUpdateForm(@Valid GroupModel groupModel, BindingResult result){
         if(result.hasErrors()){
             return "/admin/groups/update";
@@ -174,7 +155,6 @@ public class GroupModelController {
                 year = Year.of(localDate.getYear());
             }
 
-//            model.addAttribute("callendarCard", calendarCellService.calendarCardForGroup(groupId, month, year));
             List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
             Map<Integer, List<CalendarCell>> cellsMap =
                     cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));

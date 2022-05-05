@@ -3,9 +3,11 @@ package pl.coderslab.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.coderslab.bean.CalendarCell;
-import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
 import pl.coderslab.service.CalendarCellService;
@@ -42,16 +44,9 @@ public class PaymentsController {
 
     @GetMapping("/admin/payments/{userId}")
     private String paymentsForUser(Model model, @PathVariable Long userId, @RequestParam (required = false) String date){
-        // porównanie metod pierwsza z JPQL może zwracać nulla!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//        return userService.findWithPayments(userId).getPayments().toString();
-//        return userService.findByIdWithGroups(userId).getPayments().toString();
-
-
-//        User user = userService.findWithPayments(userId);
         User user = userService.findByIdWithGroupsAndPayments(userId);
         List<Payment> payments = new ArrayList<>();
         if(user!=null) {
-//            payments = userService.findByIdWithGroups(userId).getPayments();
             payments = user.getPayments();
         }
         model.addAttribute("paymentsForUser", payments);
@@ -93,8 +88,6 @@ public class PaymentsController {
         return "/user/userstart";
     }
 
-//    add new for user
-
     //Select month:
 
     @GetMapping("/admin/user/month/{userId}")
@@ -109,6 +102,8 @@ public class PaymentsController {
         model.addAttribute("actualYear", LocalDate.now().getYear());
         return "/admin/groups/selectMonth";
     }
+
+    //    add new for user
 
     @PostMapping("/admin/user/month/{userId}")
     private String proceedSelectMonthForm(@PathVariable Long userId, @RequestParam Long id, @RequestParam Integer year, @RequestParam Month month) {
