@@ -4,14 +4,19 @@
 <%@ include file="../../header.jsp" %>
 <link rel="stylesheet" href="../../../../resources/bootstrap.css" />
 
-
+<div class="col-12">
+    <a href="/user/start" class="btn btn-success">Groups menu</a>
+</div>
 <div class="col-12">
     <div class="card">
         <div class="card-body, text-black-50">
             <h2>Classes</h2>
             <h2>NumberOfClasses: ${numberOfClasses}</h2>
             <h2>PaymentAmount: ${paymentAmount}</h2>
-
+            <hr class="my-3">
+            <p>Month: ${month}</p>
+            <p>Year: ${year}</p>
+            <hr class="my-3">
             <table class="table-bordered">
                 <thead>
                 <tr>

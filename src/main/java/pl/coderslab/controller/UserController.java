@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.Utils.MonthUtil;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
@@ -25,11 +26,11 @@ public class UserController {
 
     private final UserService userService;
     private final GroupService groupService;
-    private final CalendarCellService calendarCellService;
+    private final CalendarCellServiceInterface calendarCellService;
     private final DayOfWeekService dayOfWeekService;
 
     private final PaymentService paymentService;
-    public UserController(UserService userService, GroupService groupService, CalendarCellService calendarCellService, DayOfWeekService dayOfWeekService, PaymentService paymentService) {
+    public UserController(UserService userService, GroupService groupService, CalendarCellServiceInterface calendarCellService, DayOfWeekService dayOfWeekService, PaymentService paymentService) {
         this.userService = userService;
         this.groupService = groupService;
         this.calendarCellService = calendarCellService;
@@ -63,12 +64,8 @@ public class UserController {
 
 
     private String userStartView(Model model, User user, Month month, Year year){
-//        List<CalendarCell> cells = calendarCellService.calendarCardForUser(user.getId(), LocalDate.now().getMonth(), Year.of(LocalDate.now().getYear()));
         List<CalendarCell> cells = calendarCellService.calendarCardForUser(user.getId(), month, year);
-
-        Map<Integer, List<CalendarCell>> cellsMap =
-                cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
-        List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+        List<List<CalendarCell>> weeks = calendarCellService.divideCalendarCardIntoWeeks(cells);
 
         model.addAttribute("groupsForUser", user.getGroups());
         model.addAttribute("userId", user.getId());
@@ -153,11 +150,7 @@ public class UserController {
     private String showSelectMonthForm(Model model, @PathVariable Long userId){
         model.addAttribute("id", userId);
 
-        List<Month> months = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            months.add(Month.of(i));
-        }
-        model.addAttribute("months",months);
+        model.addAttribute("months", MonthUtil.allMonths());
         model.addAttribute("actualYear", LocalDate.now().getYear());
         return "admin/groups/selectMonth";
     }

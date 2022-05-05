@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.Utils.MonthUtil;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
@@ -24,10 +25,10 @@ public class GroupModelController {
     private final CanceledClassesService canceledClassesService;
     private final UserService userService;
     private final DayOfWeekService dayOfWeekService;
-    private final CalendarCellService calendarCellService;
+    private final CalendarCellServiceInterface calendarCellService;
 
     private final PaymentService paymentService;
-    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService, CalendarCellService calendarCellService, PaymentService paymentService) {
+    public GroupModelController(GroupService groupService, CanceledClassesService canceledClassesService, UserService userService, DayOfWeekService dayOfWeekService, CalendarCellServiceInterface calendarCellService, PaymentService paymentService) {
         this.groupService = groupService;
         this.canceledClassesService = canceledClassesService;
         this.userService = userService;
@@ -123,11 +124,8 @@ public class GroupModelController {
     @GetMapping("/month/{id}")
     private String showSelectMonthForm(Model model, @PathVariable Long id){
         model.addAttribute("id", id);
-        List<Month> months = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            months.add(Month.of(i));
-        }
-        model.addAttribute("months",months);
+
+        model.addAttribute("months", MonthUtil.allMonths());
         model.addAttribute("actualYear", LocalDate.now().getYear());
         return "admin/groups/selectMonth";
     }
@@ -154,11 +152,12 @@ public class GroupModelController {
                 month = localDate.getMonth();
                 year = Year.of(localDate.getYear());
             }
+            model.addAttribute("month", month.toString());
+            model.addAttribute("year", year.toString());
 
             List<CalendarCell> cells = calendarCellService.calendarCardForGroup(groupId, month, year);
-            Map<Integer, List<CalendarCell>> cellsMap =
-                    cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
-            List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+            List<List<CalendarCell>> weeks = calendarCellService.divideCalendarCardIntoWeeks(cells);
+
             model.addAttribute("weeks", weeks);
 
             // Informacje o płatnościach:

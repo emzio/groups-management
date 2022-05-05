@@ -6,29 +6,29 @@ import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.CanceledClassesRepository;
 import pl.coderslab.repository.GroupModelRepository;
-import pl.coderslab.repository.UserRepository;
 
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-public class CalendarCellService {
+public class CalendarCellService implements CalendarCellServiceInterface{
 
     private final UserService userService;
     private final GroupModelRepository groupModelRepository;
     private final CanceledClassesRepository canceledClassesRepository;
 
-    public CalendarCellService(UserService userService, GroupModelRepository groupModelRepository, CanceledClassesRepository canceledClassesRepository) {
+    public CalendarCellService (UserService userService, GroupModelRepository groupModelRepository, CanceledClassesRepository canceledClassesRepository) {
         this.userService = userService;
         this.groupModelRepository = groupModelRepository;
         this.canceledClassesRepository = canceledClassesRepository;
     }
 
-
+    @Override
     public List<LocalDate> classesDatesForGroup(GroupModel groupModel, Month month, Year year){
         List<LocalDate> monthDateList = new ArrayList<>();
             int length = month.length(Year.isLeap(year.getValue()));
@@ -41,6 +41,7 @@ public class CalendarCellService {
         return monthDateList;
     }
 
+    @Override
     public List<CalendarCell> emptyCalendarCard(Month month, Year year){
         List<CalendarCell> cells = new ArrayList<>();
         int length = month.length(Year.isLeap(year.getValue()));
@@ -58,6 +59,7 @@ public class CalendarCellService {
         return cells;
     }
 
+    @Override
     public List<CalendarCell> calendarCardForGroup(Long id, Month month, Year year){
         List<CalendarCell> cells = emptyCalendarCard(month, year);
         Optional<GroupModel> optionalGroupModel = groupModelRepository.findById(id);
@@ -83,6 +85,7 @@ public class CalendarCellService {
         return cells;
     }
 
+    @Override
     public List<CalendarCell> calendarCardForUser(Long userId, Month month, Year year){
         User user = userService.findByIdWithGroupsAndPayments(userId);
         List<CalendarCell> cells = emptyCalendarCard(month, year);
@@ -112,68 +115,10 @@ public class CalendarCellService {
         return cells;
     }
 
-
-            // PONIŻEJ TESTOWE DO USUNIĘCIA?
-
-//    public List<LocalDate> datesForGroupById(Long id, int monthNumber, int year){
-//
-//        List<LocalDate> monthDateList = new ArrayList<>();
-//
-//        Optional<GroupModel> optionalGroupModel = groupModelRepository.findById(id);
-//        if(optionalGroupModel.isPresent()){
-//            GroupModel groupModel = optionalGroupModel.get();
-//            Year actualYear = Year.of(year);
-//            Month actualMonth = Month.of(monthNumber);
-//            int length = actualMonth.length(Year.isLeap(actualYear.getValue()));
-//
-//            for (int i = 1; i <= length; i++) {
-//                if(LocalDate.of(actualYear.getValue(), actualMonth, i).getDayOfWeek().equals(groupModel.getDayOfWeek())){
-//                    monthDateList.add(LocalDate.of(actualYear.getValue(), actualMonth, i));
-//                }
-//            }
-//
-//            canceledClassesRepository.findAll().stream()
-//                    .map(canceledClasses -> canceledClasses.getLocalDate())
-//                    .forEach(localDate -> {if(monthDateList.contains(localDate)){
-//                        monthDateList.remove(localDate);
-//                    }
-//                    });
-//        }
-//
-//        return monthDateList;
-//    }
-//
-//    public List<CalendarCell> cellsForGroupById(Long id, int monthNumber, int yearNumber) {
-//
-//        Optional<GroupModel> optionalGroupModel = groupModelRepository.findById(id);
-//
-//        List<LocalDate> classDatesForGroup = datesForGroupById(id, monthNumber, yearNumber);
-//        List<CalendarCell> cells = new ArrayList<>();
-//        if(optionalGroupModel.isPresent()){
-//            GroupModel groupModel = optionalGroupModel.get();
-//            Month month = Month.of(monthNumber);
-//            int length = month.length(Year.isLeap(yearNumber));
-//
-//            LocalDate firstDayOfMonth = LocalDate.of(yearNumber, monthNumber, 1);
-//            int periodInt = firstDayOfMonth.getDayOfWeek().getValue() - DayOfWeek.MONDAY.getValue();
-//
-//            for (int i = periodInt; i > 0 ; i--) {
-//                cells.add(new CalendarCell(LocalDate.of(yearNumber, monthNumber, 1).minus(Period.ofDays(i))));
-//            }
-//
-//            for (int i = 1; i <= length; i++) {
-//                cells.add(new CalendarCell(LocalDate.of(yearNumber, monthNumber, i)));
-//            }
-//
-//            cells.stream()
-//                    .forEach(calendarCell -> {
-//                        if (classDatesForGroup.contains(calendarCell.getDate())) {
-//                            calendarCell.setDay(groupModel.getDayOfWeek().toString());
-//                            calendarCell.setDescription(groupModel.getName() + " " + groupModel.getLocalTime().toString());
-//                        }
-//                    });
-//
-//        }
-//        return cells;
-//    }
+    public List<List<CalendarCell>> divideCalendarCardIntoWeeks(List<CalendarCell> cells){
+        Map<Integer, List<CalendarCell>> cellsMap =
+                cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
+        List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+        return weeks;
+    }
 }
