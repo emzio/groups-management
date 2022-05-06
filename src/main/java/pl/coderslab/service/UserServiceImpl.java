@@ -180,5 +180,4 @@ public class UserServiceImpl implements UserService {
     public List<User> findUsersOutOfGroup(GroupModel groupModel){
         return userRepository.findUsersOutOfGroup(groupModel);
     }
-
 }

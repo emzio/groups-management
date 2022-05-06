@@ -43,4 +43,5 @@ public interface UserService {
     public List<GroupModel> findGroupsForUserId(Long id);
 
     List<User> findUsersOutOfGroup(GroupModel groupModel);
+
 }
