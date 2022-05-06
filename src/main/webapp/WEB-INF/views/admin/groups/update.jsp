@@ -22,7 +22,11 @@
                     <form:input type="time" path="localTime"/><form:errors path="localTime"/>
                     <div class="form-label">Size: </div>
                     <form:input path="size"/><form:errors path="size"/>
-                    User:
+
+                    <div class="form-label">Payment Rate: </div>
+                    <form:input path="paymentRate" cssClass="form-control" pattern="(^[0-9]*\.[0-9]{0,2}$|^[0-9]+$)"/><form:errors path="paymentRate"/>
+
+                    <div class="form-label">User: </div>
                     <form:select path="users" multiple="true">
                     <c:forEach items="${users}" var="u">
                         <c:choose>

@@ -80,7 +80,7 @@ public class DBGroupService implements GroupService{
     @Override
     public List<GroupModel> findGroupsWithFreePlaces() {
         List<GroupModel> groupModelsWithFreePlaces = findAllJoiningUsers().stream()
-                .filter(groupModel -> groupModel.getSize() >= groupModel.getUsers().size())
+                .filter(groupModel -> groupModel.getSize() > groupModel.getUsers().size())
                 .collect(Collectors.toList());
         return groupModelsWithFreePlaces;
     }

@@ -6,10 +6,7 @@ import pl.coderslab.entity.Payment;
 import pl.coderslab.repository.PaymentRepository;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,29 +33,14 @@ public class PaymentServiceImp implements PaymentService{
     }
 
     @Override
-    public Map<String, BigDecimal> paymentAndClasses (List<CalendarCell> cells){
+    public Map<String, BigDecimal> paymentAndClasses (List<CalendarCell> cells) {
         Map<String, BigDecimal> paymentsInfo = new HashMap<>();
-        long count = cells.stream()
-                .filter(calendarCell -> calendarCell.getAddToFee() != null)
-                .filter(calendarCell -> calendarCell.getAddToFee() == true)
-                .count();
-        paymentsInfo.put("numberOfClasses", BigDecimal.valueOf(count));
-        BigDecimal paymentRate = new MockPaymentRate().getPaymentRate();
-        BigDecimal multiply = paymentRate.multiply(BigDecimal.valueOf(count));
-        paymentsInfo.put("paymentAmount", multiply);
+        BigDecimal paymentAmount = cells.stream()
+                .filter(calendarCell -> calendarCell.getAddToFee()!=null)
+                .map(calendarCell -> calendarCell.getAddToFee())
+                .reduce((bigDecimal, bigDecimal2) -> bigDecimal.add(bigDecimal2)).orElse(BigDecimal.valueOf(0));
+
+        paymentsInfo.put("paymentAmount", paymentAmount);
         return paymentsInfo;
     }
-//    @Override
-//    public Map<String, BigDecimal> paymentAndClassesForUser(List<CalendarCell> cells){
-//        Map<String, BigDecimal> paymentsInfo = new HashMap<>();
-//        long count = cells.stream()
-//                .filter(calendarCell -> calendarCell.getAddToFee() != null)
-//                .filter(calendarCell -> calendarCell.getAddToFee() == true)
-//                .count();
-//        paymentsInfo.put("numberOfClasses", BigDecimal.valueOf(count));
-//        BigDecimal paymentRate = new MockPaymentRate().getPaymentRate();
-//        BigDecimal multiply = paymentRate.multiply(BigDecimal.valueOf(count));
-//        paymentsInfo.put("paymentAmount", multiply);
-//        return paymentsInfo;
-//    }
 }

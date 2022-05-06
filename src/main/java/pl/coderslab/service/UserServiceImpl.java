@@ -11,8 +11,10 @@ import pl.coderslab.entity.User;
 import pl.coderslab.repository.RoleRepository;
 import pl.coderslab.repository.UserRepository;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -178,8 +180,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findUsersOutOfGroup(GroupModel groupModel){
-
-
         return userRepository.findUsersOutOfGroup(groupModel);
     }
 

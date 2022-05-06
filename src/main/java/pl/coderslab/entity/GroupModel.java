@@ -1,10 +1,13 @@
 package pl.coderslab.entity;
 
-import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -12,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-//@Table(name = "other")
 public class GroupModel {
 
     @Id
@@ -27,20 +29,21 @@ public class GroupModel {
     @NotBlank
     private String name;
 
-//    @DateTimeFormat(pattern = "EEE")
     private DayOfWeek dayOfWeek;
 
 
     @DateTimeFormat(pattern = "HH:mm")
     @NotNull
-//    ^(([0-9])|([0-1][0-9])|([2][0-3])):(([0-9])|([0-5][0-9]))$
-//    @Pattern(regexp = "^(([0-9])|([0-1][0-9])|([2][0-3]))(([0-9])|([0-5][0-9]))$")
     private LocalTime localTime;
 
     @Digits(integer = 2, fraction = 0)
     @Min(value = 1)
 
     private Integer size;
+
+    @Digits(integer = 8, fraction = 2)
+    @Min(value = 0)
+    private BigDecimal paymentRate;
 
     @Override
     public String toString() {
@@ -50,7 +53,16 @@ public class GroupModel {
                 ", name='" + name + '\'' +
                 ", dayOfWeek=" + dayOfWeek +
                 ", localTime=" + localTime +
+                ", paymentRate=" + paymentRate +
                 '}';
+    }
+
+    public BigDecimal getPaymentRate() {
+        return paymentRate;
+    }
+
+    public void setPaymentRate(BigDecimal paymentRate) {
+        this.paymentRate = paymentRate;
     }
 
     public Long getId() {

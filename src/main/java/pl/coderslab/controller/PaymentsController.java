@@ -3,12 +3,15 @@ package pl.coderslab.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import pl.coderslab.Utils.MonthUtil;
 import pl.coderslab.bean.CalendarCell;
-import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;
-import pl.coderslab.service.CalendarCellService;
+import pl.coderslab.service.CalendarCellServiceInterface;
 import pl.coderslab.service.DayOfWeekService;
 import pl.coderslab.service.PaymentService;
 import pl.coderslab.service.UserService;
@@ -18,20 +21,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Controller
 public class PaymentsController {
     private final UserService userService;
     private final PaymentService paymentService;
-    private final CalendarCellService calendarCellService;
+    private final CalendarCellServiceInterface calendarCellService;
     private final DayOfWeekService dayOfWeekService;
 
-    public PaymentsController(UserService userService, PaymentService paymentService, CalendarCellService calendarCellService, DayOfWeekService dayOfWeekService) {
+    public PaymentsController(UserService userService, PaymentService paymentService, CalendarCellServiceInterface calendarCellService, DayOfWeekService dayOfWeekService) {
         this.userService = userService;
         this.paymentService = paymentService;
         this.calendarCellService = calendarCellService;
@@ -42,17 +41,11 @@ public class PaymentsController {
 
     @GetMapping("/admin/payments/{userId}")
     private String paymentsForUser(Model model, @PathVariable Long userId, @RequestParam (required = false) String date){
-        // porównanie metod pierwsza z JPQL może zwracać nulla!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//        return userService.findWithPayments(userId).getPayments().toString();
-//        return userService.findByIdWithGroups(userId).getPayments().toString();
-
-
-//        User user = userService.findWithPayments(userId);
         User user = userService.findByIdWithGroupsAndPayments(userId);
         List<Payment> payments = new ArrayList<>();
         if(user!=null) {
-//            payments = userService.findByIdWithGroups(userId).getPayments();
             payments = user.getPayments();
+            Collections.sort(payments, (s,t)-> s.getPaymentCode().compareTo(t.getPaymentCode()));
         }
         model.addAttribute("paymentsForUser", payments);
         model.addAttribute("userId", userId);
@@ -77,9 +70,7 @@ public class PaymentsController {
     private String addUserCalendarCells(Model model, User user, Month month, Year year){
         List<CalendarCell> cells = calendarCellService.calendarCardForUser(user.getId(), month, year);
 
-        Map<Integer, List<CalendarCell>> cellsMap =
-                cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
-        List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+        List<List<CalendarCell>> weeks = calendarCellService.divideCalendarCardIntoWeeks(cells);
 
         model.addAttribute("groupsForUser", user.getGroups());
         model.addAttribute("userId", user.getId());
@@ -93,22 +84,18 @@ public class PaymentsController {
         return "/user/userstart";
     }
 
-//    add new for user
-
     //Select month:
 
     @GetMapping("/admin/user/month/{userId}")
     private String showSelectMonthForm(Model model, @PathVariable Long userId){
         model.addAttribute("id", userId);
 
-        List<Month> months = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            months.add(Month.of(i));
-        }
-        model.addAttribute("months",months);
+        model.addAttribute("months", MonthUtil.allMonths());
         model.addAttribute("actualYear", LocalDate.now().getYear());
         return "/admin/groups/selectMonth";
     }
+
+    //    add new for user
 
     @PostMapping("/admin/user/month/{userId}")
     private String proceedSelectMonthForm(@PathVariable Long userId, @RequestParam Long id, @RequestParam Integer year, @RequestParam Month month) {
