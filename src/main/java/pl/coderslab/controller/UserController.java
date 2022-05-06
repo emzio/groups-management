@@ -182,6 +182,8 @@ public class UserController {
         User user = new User();
         user.setUsername("admin3");
         user.setPassword("admin3");
+        user.setName("admin3");
+        user.setLastName("admin3");
         userService.saveAdmin(user);
         return "admin2";
     }

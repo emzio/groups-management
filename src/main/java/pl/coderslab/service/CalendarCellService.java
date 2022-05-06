@@ -7,6 +7,7 @@ import pl.coderslab.entity.User;
 import pl.coderslab.repository.CanceledClassesRepository;
 import pl.coderslab.repository.GroupModelRepository;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +74,11 @@ public class CalendarCellService implements CalendarCellServiceInterface{
             cells.stream()
                     .forEach(calendarCell -> {
                         if (classesDates.contains(calendarCell.getDate())) {
-                            calendarCell.setAddToFee(true);
+                            calendarCell.setAddToFee(groupModel.getPaymentRate());
                             calendarCell.setDescription(groupModel.getName() + " " + groupModel.getDayOfWeek().toString());
                         }
                         if(canceledClassesDates.contains(calendarCell.getDate())){
-                            calendarCell.setAddToFee(false);
+                            calendarCell.setAddToFee(BigDecimal.valueOf(0));
                             calendarCell.setDescription("Free Day!");
                         }
                     });

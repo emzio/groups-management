@@ -1,10 +1,11 @@
 package pl.coderslab.bean;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class CalendarCell implements Cell{
     private LocalDate date;
-    private Boolean addToFee;
+    private BigDecimal addToFee;
     private String description;
 
     public CalendarCell() {
@@ -34,11 +35,11 @@ public class CalendarCell implements Cell{
     }
 
     @Override
-    public Boolean getAddToFee() {
+    public BigDecimal getAddToFee() {
         return addToFee;
     }
 
-    public void setAddToFee(Boolean addToFee) {
+    public void setAddToFee(BigDecimal addToFee) {
         this.addToFee = addToFee;
     }
 

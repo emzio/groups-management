@@ -31,6 +31,10 @@
 
                     <div class="form-label">Size: </div>
                     <form:input path="size" cssClass="form-control"/><form:errors path="size"/>
+
+                    <div class="form-label">Payment Rate: </div>
+                    <form:input type="number" step=".01" path="paymentRate" cssClass="form-control"/><form:errors path="paymentRate"/>
+
                 </div>
                 <input type="submit" value="Add Group" class="btn btn-primary">
             </form:form>

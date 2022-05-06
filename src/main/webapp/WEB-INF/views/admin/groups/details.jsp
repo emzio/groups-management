@@ -68,6 +68,9 @@
                         Size
                     </td>
                     <td>
+                        Payment Rate
+                    </td>
+                    <td>
                         Actions
                     </td>
                 </tr>
@@ -86,7 +89,9 @@
                     <td>
                         ${group.getSize()}
                     </td>
-
+                    <td>
+                        ${group.getPaymentRate()}
+                    </td>
                     <td>
                         <a href="/admin/groups/addUser/${group.getId()}" > add User </a>
                         <a href="/admin/groups/update/${group.getId()}"> update </a>
