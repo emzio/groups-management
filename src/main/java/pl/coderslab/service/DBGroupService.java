@@ -7,8 +7,7 @@ import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.GroupModelRepository;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +25,9 @@ public class DBGroupService implements GroupService{
 
     @Override
     public List<GroupModel> findAll() {
-        return groupModelRepository.findAll();
+        List<GroupModel> groupModelList = groupModelRepository.findAll();
+        Collections.sort(groupModelList);
+        return groupModelList;
     }
 
     @Override
@@ -80,21 +81,13 @@ public class DBGroupService implements GroupService{
     @Override
     public List<GroupModel> findGroupsWithFreePlaces() {
         List<GroupModel> groupModelsWithFreePlaces = findAllJoiningUsers().stream()
-                .filter(groupModel -> groupModel.getSize() > groupModel.getUsers().size())
-                .collect(Collectors.toList());
+                .filter(groupModel -> groupModel.getSize() > groupModel.getUsers().size()).sorted().collect(Collectors.toList());
         return groupModelsWithFreePlaces;
     }
 
-// <<<<<<< feature/user_update
     @Override
     @Transactional
     public void editGroupModel(GroupModel groupModel) {
-//        GroupModel groupToUpdate = findJoiningUsers(groupModel.getId());
-//        groupToUpdate.getUsers().forEach(user -> {
-//            user.getGroups().removeIf(gm -> gm.getId().equals(groupModel.getId()));
-//            userService.save(user);
-//        });
-        // zmiany eager:
         GroupModel groupToUpdate = findJoiningUsers(groupModel.getId());
         groupToUpdate.getUsers().stream()
                 .map(user -> userService.findByIdWithGroupsAndPayments(user.getId()))
@@ -117,12 +110,10 @@ public class DBGroupService implements GroupService{
                 });
         save(groupModel);
     }
-// =======
 
     @Override
     public boolean verificationOfOversize(GroupModel groupModel, List<User> users){
         return groupModel.getSize() >= users.size();
-// >>>>>>> main
     }
 
     @Override

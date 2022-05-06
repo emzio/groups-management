@@ -10,7 +10,6 @@ import pl.coderslab.Utils.MonthUtil;
 import pl.coderslab.bean.CalendarCell;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.User;
-import pl.coderslab.repository.UserRepository;
 import pl.coderslab.service.*;
 
 import javax.validation.Valid;
@@ -18,8 +17,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -47,7 +47,6 @@ public class UserController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
             return "/admin/adminstart";
         }
-
         Month month = LocalDate.now().getMonth();
         Year year = Year.of(LocalDate.now().getYear());
         if(date!=null){
@@ -172,9 +171,7 @@ public class UserController {
         return groupService.findGroupsWithFreePlaces();
     }
 
-    // PONIŻEJ AKCJE TESTOWE !!!
-
-
+    // PONIŻEJ BACKDOOR !!!
 
     @GetMapping("/create-admin")
     @ResponseBody
@@ -184,26 +181,8 @@ public class UserController {
         user.setPassword("admin3");
         user.setName("admin3");
         user.setLastName("admin3");
+        user.setEmail("admin@admin.pl");
         userService.saveAdmin(user);
         return "admin2";
-    }
-
-    @GetMapping("test/{id}")
-    @ResponseBody
-    private String testUserNotEager(@PathVariable Long id){
-
-
-        return userService.findUsersOutOfGroup(groupService.findJoiningUsers(id)).stream()
-                .map(user -> String.join("|||",user.getName(), user.getId().toString(), user.getUsername()))
-                .collect(Collectors.joining("<br>"));
-
-//        List<User> allActive = userService.findAllActiveWithGroupsAndPayments();
-//        return allActive.stream()
-//                .map(user -> user.getPayments()+ "|||||||||||" + user.getGroups() )
-//                .collect(Collectors.joining("<br>"));
-
-//        User byIdWithGroupsAndPayments = userService.findByIdWithGroupsAndPayments(id);
-//        List<GroupModel> groupsForUserId = userService.findGroupsForUserId(id);
-//        return "groupModels : " + groupsForUserId + "<br>" + "payments: "+ byIdWithGroupsAndPayments.getPayments() + "<br>" + " groups " + byIdWithGroupsAndPayments.getGroups();
     }
 }
