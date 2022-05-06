@@ -76,7 +76,7 @@
                         <c:forEach items="${week}" var="cell">
                             <td>
                                     ${cell.getDate().getDayOfMonth()}
-                                    ${cell.getAddToFee()}
+<%--                                    ${cell.getAddToFee()}--%>
                                     ${cell.getDescription()}
                             </td>
                         </c:forEach>
