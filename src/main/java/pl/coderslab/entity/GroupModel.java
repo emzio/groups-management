@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-public class GroupModel {
+public class GroupModel implements Comparable<GroupModel>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,6 @@ public class GroupModel {
     private Long id;
 
     @ManyToMany(mappedBy = "groups", cascade = CascadeType.MERGE)
-//    @ManyToMany(mappedBy = "groups")
     private List<User> users = new ArrayList<>();
 
     @NotBlank
@@ -118,4 +117,14 @@ public class GroupModel {
     public void setSize(Integer size) {
         this.size = size;
     }
+
+        @Override
+        public int compareTo(GroupModel groupModel) {
+        if(this.getDayOfWeek().getValue()==groupModel.getDayOfWeek().getValue()){
+            return this.getLocalTime().isAfter(groupModel.getLocalTime()) ? 1 : -1;
+        } else if(this.getDayOfWeek().getValue()>groupModel.getDayOfWeek().getValue()){
+            return 1;
+            }
+        return -1;
+        }
 }

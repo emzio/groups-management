@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.entity.CanceledClasses;
 import pl.coderslab.repository.CanceledClassesRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,9 @@ public class CanceledClassesServiceImpl implements CanceledClassesService{
 
     @Override
     public List<CanceledClasses> findAll() {
-        return canceledClassesRepository.findAll();
+        List<CanceledClasses> canceledClassesList = canceledClassesRepository.findAll();
+        Collections.sort(canceledClassesList, (c, c1) -> c.getLocalDate().compareTo(c1.getLocalDate()));
+        return canceledClassesList;
     }
 
     @Override

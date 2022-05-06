@@ -75,7 +75,7 @@ public class CalendarCellService implements CalendarCellServiceInterface{
                     .forEach(calendarCell -> {
                         if (classesDates.contains(calendarCell.getDate())) {
                             calendarCell.setAddToFee(groupModel.getPaymentRate());
-                            calendarCell.setDescription(groupModel.getName() + " " + groupModel.getDayOfWeek().toString());
+                            calendarCell.setDescription(groupModel.getName() );
                         }
                         if(canceledClassesDates.contains(calendarCell.getDate())){
                             calendarCell.setAddToFee(BigDecimal.valueOf(0));
@@ -107,7 +107,7 @@ public class CalendarCellService implements CalendarCellServiceInterface{
                                         .findFirst()
                                         .orElse(-1);
 
-                                calendarCell.setDescription(calendarCell.getDescription() + cellsForGroup.get(index).getDescription()+calendarCell.getDate());
+                                calendarCell.setDescription(cellsForGroup.get(index).getDescription());
                                 calendarCell.setAddToFee(cellsForGroup.get(index).getAddToFee());
                             }
                         });
