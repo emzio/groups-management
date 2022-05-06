@@ -14,7 +14,6 @@ import java.time.LocalDate;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id", nullable = false)
     private Long id;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

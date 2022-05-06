@@ -1,9 +1,5 @@
 package pl.coderslab.service;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Service;
 import pl.coderslab.entity.GroupModel;
 import pl.coderslab.entity.Payment;
 import pl.coderslab.entity.User;

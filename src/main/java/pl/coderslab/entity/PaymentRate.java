@@ -1,4 +1,4 @@
-package pl.coderslab.entity;
-
-public class PaymentRate {
-}
+//package pl.coderslab.entity;
+//
+//public class PaymentRate {
+//}

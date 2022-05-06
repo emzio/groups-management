@@ -172,8 +172,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-// test
-
     public List<GroupModel> findGroupsForUserId(Long id){
         return userRepository.findGroupsForUserId(id);
     }
