@@ -97,7 +97,10 @@ public class DBGroupService implements GroupService{
                 });
 
         // groupModel.getUserListId() ???
-        groupToUpdate.getUsers().removeIf(u -> !groupModel.getUsers().stream().map(User::getId).collect(Collectors.toList()).contains(u.getId()));
+//        groupToUpdate.getUsers().removeIf(u -> !groupModel.getUsers().stream().map(User::getId).collect(Collectors.toList()).contains(u.getId()));
+
+        groupToUpdate.getUsers().removeIf(u -> !groupModel.getUserListId().contains(u.getId()));
+
         save(groupToUpdate);
         groupToUpdate.setUsers(groupModel.getUsers());
         groupToUpdate.getUsers().stream()
