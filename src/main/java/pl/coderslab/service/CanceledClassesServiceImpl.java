@@ -16,7 +16,6 @@ public class CanceledClassesServiceImpl implements CanceledClassesService{
         this.canceledClassesRepository = canceledClassesRepository;
     }
 
-
     @Override
     public List<CanceledClasses> findAll() {
         List<CanceledClasses> canceledClassesList = canceledClassesRepository.findAll();
@@ -42,5 +41,10 @@ public class CanceledClassesServiceImpl implements CanceledClassesService{
     @Override
     public void update(CanceledClasses canceledClasses) {
         canceledClassesRepository.save(canceledClasses);
+    }
+
+    @Override
+    public List<CanceledClasses> findAllOrderedByLocalDate(){
+        return canceledClassesRepository.findAllOrderedByLocalDate();
     }
 }

@@ -24,7 +24,7 @@ public class CanceledClassesController {
     //findAll
     @GetMapping("")
     private String findAll(Model model){
-        model.addAttribute("allCanceled", canceledClassesService.findAll());
+        model.addAttribute("allCanceled", canceledClassesService.findAllOrderedByLocalDate());
         return "admin/CanceledClasses/canceled";
     }
 

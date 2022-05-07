@@ -17,4 +17,5 @@ public interface CanceledClassesService {
 
     public void update(CanceledClasses canceledClasses);
 
+    List<CanceledClasses> findAllOrderedByLocalDate();
 }
