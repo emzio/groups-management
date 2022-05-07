@@ -131,7 +131,7 @@ public class CalendarCellService implements CalendarCellServiceInterface{
     public List<List<CalendarCell>> divideCalendarCardIntoWeeks(List<CalendarCell> cells){
         Map<Integer, List<CalendarCell>> cellsMap =
                 cells.stream().collect(Collectors.groupingBy(calendarCell -> cells.indexOf(calendarCell)/7));
-        List<List<CalendarCell>> weeks = new ArrayList<List<CalendarCell>>(cellsMap.values());
+        List<List<CalendarCell>> weeks = new ArrayList<>(cellsMap.values());
         return weeks;
     }
 }
