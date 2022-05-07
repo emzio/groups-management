@@ -57,8 +57,20 @@ public class CalendarCellService implements CalendarCellServiceInterface{
         for (int i = 1; i <= length; i++) {
             cells.add(new CalendarCell(LocalDate.of(year.getValue(), month, i)));
         }
+        addEndOfWeek(cells, month, year);
         return cells;
     }
+
+    @Override
+    public void addEndOfWeek(List<CalendarCell> cells, Month month, Year year){
+        int lastDayNumber = month.length(year.isLeap());
+        LocalDate lastDayOfMonth = LocalDate.of(year.getValue(), month, lastDayNumber);
+
+        int period = DayOfWeek.SUNDAY.getValue() - lastDayOfMonth.getDayOfWeek().getValue();
+        for (int i = 1; i <= period ; i++) {
+            cells.add(new CalendarCell(lastDayOfMonth.plus(Period.ofDays(i))));
+        }
+    };
 
     @Override
     public List<CalendarCell> calendarCardForGroup(Long id, Month month, Year year){
