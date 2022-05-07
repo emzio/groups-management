@@ -6,8 +6,10 @@ import pl.coderslab.entity.Payment;
 import pl.coderslab.repository.PaymentRepository;
 
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PaymentServiceImp implements PaymentService{
@@ -36,8 +38,8 @@ public class PaymentServiceImp implements PaymentService{
     public Map<String, BigDecimal> paymentAndClasses (List<CalendarCell> cells) {
         Map<String, BigDecimal> paymentsInfo = new HashMap<>();
         BigDecimal paymentAmount = cells.stream()
-                .filter(calendarCell -> calendarCell.getAddToFee()!=null)
-                .map(calendarCell -> calendarCell.getAddToFee())
+                .map(CalendarCell::getAddToFee)
+                .filter(addToFee -> addToFee !=null)
                 .reduce((bigDecimal, bigDecimal2) -> bigDecimal.add(bigDecimal2)).orElse(BigDecimal.valueOf(0));
 
         paymentsInfo.put("paymentAmount", paymentAmount);

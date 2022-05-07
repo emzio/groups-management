@@ -19,4 +19,6 @@ public interface CalendarCellServiceInterface {
     public List<CalendarCell> calendarCardForUser(Long userId, Month month, Year year);
 
     List<List<CalendarCell>> divideCalendarCardIntoWeeks(List<CalendarCell> cells);
+
+    void addEndOfWeek(List<CalendarCell> cells, Month month, Year year);
 }

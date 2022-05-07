@@ -1,13 +1,10 @@
 package pl.coderslab.entity;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,15 +23,12 @@ public class User {
     @NotBlank
     private String password;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
     @ManyToMany
     private List<GroupModel> groups = new ArrayList<>();
 
 
 
    @OneToMany
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "user_id")
     private List<Payment> payments = new ArrayList<>();
 

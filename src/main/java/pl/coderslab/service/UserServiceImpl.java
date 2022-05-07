@@ -172,8 +172,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-// test
-
     public List<GroupModel> findGroupsForUserId(Long id){
         return userRepository.findGroupsForUserId(id);
     }
@@ -182,5 +180,4 @@ public class UserServiceImpl implements UserService {
     public List<User> findUsersOutOfGroup(GroupModel groupModel){
         return userRepository.findUsersOutOfGroup(groupModel);
     }
-
 }
